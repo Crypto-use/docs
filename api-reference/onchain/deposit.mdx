@@ -1,6 +1,6 @@
 ---
 title: 'Criar Depósito'
-api: 'POST /api/v1/onchain/deposit'
+api: 'POST /api/onchain/deposit'
 description: 'Crie uma nova ordem de depósito e gere um endereço para receber fundos'
 ---
 
@@ -29,7 +29,7 @@ Este endpoint cria uma nova ordem de depósito onchain e gera um endereço de ca
 ### Exemplo de requisição
 
 ```bash
-curl -X POST "https://api.cryptouse.com/api/v1/onchain/deposit" \
+curl -X POST "https://api.cryptouse.com/api/onchain/deposit" \
   -H "Content-Type: application/json" \
   -H "X-App-ID: sua_chave_de_api" \
   -d '{

@@ -1,6 +1,6 @@
 ---
 title: 'Iniciar Saque'
-api: 'POST /api/v1/onchain/withdraw/initiate'
+api: 'POST /api/onchain/withdraw/initiate'
 description: 'Inicie uma transação de saque para um endereço externo'
 ---
 
@@ -27,7 +27,7 @@ Este endpoint inicia uma transação de saque da carteira do usuário para um en
 ### Exemplo de requisição
 
 ```bash
-curl -X POST "https://api.cryptouse.com/api/v1/onchain/withdraw/initiate" \
+curl -X POST "https://api.cryptouse.com/api/onchain/withdraw/initiate" \
   -H "Content-Type: application/json" \
   -H "X-App-ID: sua_chave_de_api" \
   -d '{
