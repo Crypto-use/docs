@@ -1,0 +1,51 @@
+---
+title: 'Onchain'
+description: 'Endpoints para operações em blockchain'
+---
+
+# Onchain
+
+Endpoints para operações diretas em blockchain, como depósitos e saques.
+
+## Endpoints disponíveis
+
+<CardGroup cols={2}>
+  <Card
+    title="Criar Depósito"
+    icon="plus"
+    href="/api-reference/endpoint/onchain/deposit"
+  >
+    Crie uma nova ordem de depósito e gere um endereço para receber fundos
+  </Card>
+  <Card
+    title="Iniciar Saque"
+    icon="arrow-up-from-bracket"
+    href="/api-reference/endpoint/onchain/withdraw"
+  >
+    Inicie uma transação de saque para um endereço externo
+  </Card>
+  <Card
+    title="Consultar Ordem"
+    icon="magnifying-glass"
+    href="/api-reference/endpoint/onchain/order"
+  >
+    Obtenha detalhes de uma ordem blockchain específica
+  </Card>
+</CardGroup>
+
+## Autenticação
+
+<ParamField header="X-App-ID" type="string" required>
+  Sua chave de API
+</ParamField>
+
+## Códigos de status
+
+| Código | Descrição |
+|--------|-----------|
+| 200 | Sucesso na operação |
+| 201 | Recurso criado com sucesso |
+| 400 | Erro na requisição ou dados inválidos |
+| 401 | Autenticação inválida ou ausente |
+| 404 | Recurso não encontrado |
+| 500 | Erro interno do servidor | 

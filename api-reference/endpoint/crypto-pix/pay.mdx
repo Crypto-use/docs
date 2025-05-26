@@ -1,0 +1,109 @@
+---
+title: 'Processar Pagamento PIX'
+api: 'POST /api/v1/crypto-pix/onchain/pay'
+description: 'Converta criptomoeda e faça um pagamento PIX'
+---
+
+## Processar pagamento de criptomoeda para PIX
+
+Este endpoint permite converter criptomoeda e realizar um pagamento PIX usando o QR code fornecido.
+
+### Requisição
+
+<ParamField body="qrcode" type="string" required>
+  O QR code PIX a ser processado
+</ParamField>
+
+<ParamField body="network" type="string" required>
+  Rede blockchain a ser utilizada
+  
+  Valores possíveis: `bsc`, `eth`
+</ParamField>
+
+### Exemplo de requisição
+
+```bash
+curl -X POST "https://api.cryptouse.com/api/v1/crypto-pix/onchain/pay" \
+  -H "Content-Type: application/json" \
+  -H "X-App-ID: sua_chave_de_api" \
+  -d '{
+    "qrcode": "00020101021226890014br.gov.bcb.pix2557brcode.example.com/pix/v2/cobv/9d36b84f10194c88ab8b9113b94fb24825204000053039865802BR5913EMPRESA TESTE6008SAO PAULO62070503***6304E2CA",
+    "network": "bsc"
+  }'
+```
+
+### Resposta
+
+<ResponseField name="data" type="object">
+  <Expandable title="Propriedades">
+    <ResponseField name="pixKey" type="string">
+      A chave PIX do destinatário
+    </ResponseField>
+    <ResponseField name="payCryptoPixId" type="string">
+      Identificador único para o pagamento
+    </ResponseField>
+    <ResponseField name="value" type="number">
+      O valor em BRL a ser pago
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Exemplo de resposta
+
+<CodeGroup>
+
+```json Sucesso (200)
+{
+  "data": {
+    "pixKey": "email@exemplo.com",
+    "payCryptoPixId": "cptpix_12345abcde",
+    "value": 120.50
+  }
+}
+```
+
+```json Requisição inválida (400)
+{
+  "message": "QR code PIX inválido ou mal-formatado"
+}
+```
+
+```json Erro interno (500)
+{
+  "message": "Ocorreu um erro ao processar sua solicitação"
+}
+```
+
+</CodeGroup>
+
+## Como funciona o Crypto-PIX
+
+O serviço Crypto-PIX permite que você pague contas e transferências PIX usando criptomoedas. O processo funciona da seguinte forma:
+
+1. Você envia o QR code PIX e a rede blockchain desejada
+2. Nosso sistema lê o QR code e extrai as informações do pagamento
+3. É criado um endereço de carteira para receber a criptomoeda
+4. Você transfere a criptomoeda para o endereço gerado
+5. Após a confirmação, realizamos o pagamento PIX para o destinatário
+
+## Taxa de conversão
+
+A taxa de conversão entre criptomoeda e BRL é fixada no momento em que a requisição é recebida. Isto garante que o valor exato em BRL seja pago, independentemente de flutuações no preço da criptomoeda durante o processamento.
+
+## Suporte a diferentes tipos de PIX
+
+Este endpoint suporta todos os tipos de QR codes PIX:
+
+- PIX estático
+- PIX dinâmico 
+- PIX Copia e Cola (BRCode)
+- Faturas PIX (QR code com valor definido)
+
+## Tempo de processamento
+
+O tempo de processamento depende da rede blockchain selecionada:
+
+| Rede | Tempo estimado |
+|------|----------------|
+| BSC (Binance Smart Chain) | 30 segundos a 2 minutos |
+| ETH (Ethereum) | 1 a 10 minutos | 

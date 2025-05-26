@@ -1,0 +1,127 @@
+---
+title: 'Criar Ordem Binance'
+api: 'POST /api/v1/order/create'
+description: 'Gere um novo QR code de pagamento Binance para o valor especificado'
+---
+
+## Criar nova ordem Binance
+
+Este endpoint gera um novo QR code de pagamento Binance Pay para o valor especificado.
+
+### Requisição
+
+<ParamField body="value" type="number" required>
+  O valor do pagamento em BRL
+</ParamField>
+
+<ParamField body="payerId" type="string">
+  Referência opcional do ID do pagador
+</ParamField>
+
+<ParamField body="merchant" type="object">
+  <Expandable title="Propriedades">
+    <ParamField name="subMerchantId" type="string">
+      Identificador do comerciante para o pagamento
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+### Exemplo de requisição
+
+```bash
+curl -X POST "https://api.cryptouse.com/api/v1/order/create" \
+  -H "Content-Type: application/json" \
+  -H "X-App-ID: sua_chave_de_api" \
+  -d '{
+    "value": 100.00,
+    "payerId": "cliente_123",
+    "merchant": {
+      "subMerchantId": "loja_001"
+    }
+  }'
+```
+
+### Resposta
+
+<ResponseField name="message" type="string">
+  Mensagem de sucesso
+</ResponseField>
+
+<ResponseField name="order" type="object">
+  <Expandable title="Propriedades">
+    <ResponseField name="id" type="string">
+      ID da ordem
+    </ResponseField>
+    <ResponseField name="paymentLinkId" type="string">
+      Identificador único do link de pagamento
+    </ResponseField>
+    <ResponseField name="value" type="number">
+      Valor do pagamento em BRL
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      Status da ordem
+      
+      Valores possíveis: `PENDING`, `COMPLETED`, `CANCELLED`, `FAILED`, `REFUND`
+    </ResponseField>
+    <ResponseField name="qrCodeLink" type="string">
+      URL para a imagem do QR code
+    </ResponseField>
+    <ResponseField name="link" type="string">
+      URL de pagamento para o usuário
+    </ResponseField>
+    <ResponseField name="createdAt" type="string" format="date-time">
+      Timestamp de criação da ordem
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Exemplo de resposta
+
+<CodeGroup>
+
+```json Sucesso (201)
+{
+  "message": "Ordem criada com sucesso",
+  "order": {
+    "id": "ord_12345abcde",
+    "paymentLinkId": "pmt_12345abcde",
+    "value": 100.00,
+    "status": "PENDING",
+    "qrCodeLink": "https://api.cryptouse.com/qr/binance/pmt_12345abcde.png",
+    "link": "https://pay.binance.com/en/checkout/12345abcde",
+    "createdAt": "2023-07-15T10:30:00Z"
+  }
+}
+```
+
+```json Requisição inválida (400)
+{
+  "success": false,
+  "error": "Valor inválido. O valor mínimo é R$ 5,00"
+}
+```
+
+```json Não autorizado (401)
+{
+  "success": false,
+  "error": "Chave de API inválida ou não autorizada"
+}
+```
+
+</CodeGroup>
+
+## Como utilizar
+
+1. Crie a ordem de pagamento usando este endpoint
+2. Apresente o QR code gerado (`qrCodeLink`) para o cliente
+3. O cliente escaneia o QR code com o app da Binance
+4. Após a confirmação do pagamento, você receberá um webhook
+5. Verifique o status da ordem usando o endpoint `GET /api/v1/order/{id}`
+
+## Validade do QR code
+
+O QR code Binance gerado tem validade de 30 minutos. Após este período, a ordem expira automaticamente e um novo QR code precisa ser gerado.
+
+## Taxas
+
+A taxa para pagamentos via Binance Pay é de 0.5% sobre o valor da transação. Esta taxa é automaticamente deduzida do valor recebido. 

@@ -1,0 +1,143 @@
+---
+title: 'Criar Ordem PIX'
+api: 'POST /api/v1/order/create/pix'
+description: 'Crie uma nova ordem de pagamento PIX'
+---
+
+## Criar ordem de pagamento PIX
+
+Este endpoint gera um novo QR code de pagamento PIX para o valor especificado.
+
+### Requisição
+
+<ParamField body="orderRequest" type="string">
+  Referência da solicitação de ordem (opcional)
+</ParamField>
+
+<ParamField body="merchant" type="string">
+  Referência do comerciante (opcional)
+</ParamField>
+
+<ParamField body="value" type="number" required>
+  O valor do pagamento em BRL
+</ParamField>
+
+<ParamField body="orderId" type="string">
+  ID de ordem personalizado (opcional)
+</ParamField>
+
+<ParamField body="name" type="string" required>
+  Nome do cliente
+</ParamField>
+
+<ParamField body="cnpj" type="string">
+  Número de CNPJ da empresa
+</ParamField>
+
+<ParamField body="cpf" type="string">
+  Número de CPF pessoal (opcional)
+</ParamField>
+
+### Exemplo de requisição
+
+```bash
+curl -X POST "https://api.cryptouse.com/api/v1/order/create/pix" \
+  -H "Content-Type: application/json" \
+  -H "X-App-ID: sua_chave_de_api" \
+  -d '{
+    "orderRequest": "req_123",
+    "merchant": "merch_456",
+    "value": 200.00,
+    "orderId": "ord_custom_789",
+    "name": "Empresa Exemplo Ltda",
+    "cnpj": "12345678901234"
+  }'
+```
+
+### Resposta
+
+<ResponseField name="message" type="string">
+  Mensagem de sucesso
+</ResponseField>
+
+<ResponseField name="pixOrder" type="object">
+  <Expandable title="Propriedades">
+    <ResponseField name="paymentLinkId" type="string">
+      Identificador único do link de pagamento
+    </ResponseField>
+    <ResponseField name="value" type="number">
+      Valor do pagamento em BRL
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      Status da ordem
+      
+      Valores possíveis: `PENDING`, `COMPLETED`, `CANCELLED`, `FAILED`, `REFUND`
+    </ResponseField>
+    <ResponseField name="brcode" type="string">
+      Código BR do PIX para pagamento
+    </ResponseField>
+    <ResponseField name="link" type="string">
+      URL de pagamento para o usuário
+    </ResponseField>
+    <ResponseField name="createdAt" type="string" format="date-time">
+      Timestamp de criação da ordem
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Exemplo de resposta
+
+<CodeGroup>
+
+```json Sucesso (200)
+{
+  "message": "Ordem PIX criada com sucesso",
+  "pixOrder": {
+    "paymentLinkId": "pmt_12345abcde",
+    "value": 200.00,
+    "status": "PENDING",
+    "brcode": "00020101021226890014br.gov.bcb.pix2557invoice.cryptouse.com/pmt_12345abcde5204000053039865802BR5913Empresa PIX6008Sao Paulo62290525pmt_12345abcde1234567890123640230A",
+    "link": "https://pay.cryptouse.com/pix/pmt_12345abcde",
+    "createdAt": "2023-04-20T15:00:00Z"
+  }
+}
+```
+
+```json Requisição inválida (400)
+{
+  "message": "Dados inválidos na requisição"
+}
+```
+
+</CodeGroup>
+
+## O que é PIX?
+
+PIX é o sistema de pagamentos instantâneos do Banco Central do Brasil. Ele permite transferências e pagamentos em segundos, 24 horas por dia, 7 dias por semana, incluindo feriados.
+
+## Pagamento via PIX
+
+Os usuários podem pagar um QR code PIX das seguintes formas:
+
+1. Escaneando o QR code com o aplicativo do seu banco
+2. Copiando e colando o código BR PIX no aplicativo do banco
+3. Acessando o link de pagamento em um dispositivo móvel
+
+## Benefícios do PIX
+
+- **Rapidez**: Transferências confirmadas em segundos
+- **Disponibilidade**: Funciona 24/7, incluindo finais de semana e feriados
+- **Facilidade**: Basta escanear um QR code
+- **Segurança**: Regulamentado pelo Banco Central do Brasil
+
+## Tempo de expiração
+
+Os QR codes PIX não expiram por padrão, mas a ordem pode ser configurada para expirar após um período específico.
+
+## Conciliação
+
+Quando um pagamento PIX é recebido, nosso sistema automaticamente:
+
+1. Identifica a ordem correspondente
+2. Atualiza o status para `COMPLETED`
+3. Envia uma notificação para seu sistema 

@@ -1,0 +1,43 @@
+---
+title: 'Crypto PIX'
+description: 'Endpoints para conversão de criptomoedas para PIX'
+---
+
+# Crypto PIX
+
+Endpoints para converter criptomoedas para pagamentos PIX.
+
+## Endpoints disponíveis
+
+<CardGroup cols={2}>
+  <Card
+    title="Processar Pagamento PIX"
+    icon="money-bill-transfer"
+    href="/api-reference/endpoint/crypto-pix/pay"
+  >
+    Converta criptomoeda e faça um pagamento PIX
+  </Card>
+  <Card
+    title="Consultar Ordem Crypto-PIX"
+    icon="magnifying-glass"
+    href="/api-reference/endpoint/crypto-pix/get-order"
+  >
+    Obtenha detalhes de um pagamento Crypto-PIX
+  </Card>
+</CardGroup>
+
+## Autenticação
+
+<ParamField header="X-App-ID" type="string" required>
+  Sua chave de API
+</ParamField>
+
+## Códigos de status
+
+| Código | Descrição |
+|--------|-----------|
+| 200 | Sucesso na operação |
+| 400 | Erro na requisição ou dados inválidos |
+| 401 | Autenticação inválida ou ausente |
+| 404 | Recurso não encontrado |
+| 500 | Erro interno do servidor | 

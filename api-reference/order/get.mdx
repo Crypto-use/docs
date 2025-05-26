@@ -1,0 +1,125 @@
+---
+title: 'Consultar Ordem'
+api: 'GET /api/v1/order/{id}'
+description: 'Obtenha detalhes de uma ordem de pagamento específica'
+---
+
+## Obter detalhes da ordem
+
+Este endpoint permite recuperar informações sobre uma ordem de pagamento específica usando seu ID de link de pagamento ou identificador de pagamento.
+
+### Parâmetros de URL
+
+<ParamField path="id" type="string" required>
+  ID do link de pagamento ou identificador de pagamento
+</ParamField>
+
+### Exemplo de requisição
+
+```bash
+curl -X GET "https://api.cryptouse.com/api/v1/order/pmt_12345abcde" \
+  -H "X-App-ID: sua_chave_de_api"
+```
+
+### Resposta
+
+<ResponseField name="message" type="string">
+  Mensagem de sucesso
+</ResponseField>
+
+<ResponseField name="order" type="object">
+  <Expandable title="Propriedades">
+    <ResponseField name="id" type="string">
+      ID da ordem
+    </ResponseField>
+    <ResponseField name="paymentLinkId" type="string">
+      Identificador único do link de pagamento
+    </ResponseField>
+    <ResponseField name="value" type="number">
+      Valor do pagamento em BRL
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      Status da ordem
+      
+      Valores possíveis: `PENDING`, `COMPLETED`, `CANCELLED`, `FAILED`, `REFUND`
+    </ResponseField>
+    <ResponseField name="createdAt" type="string" format="date-time">
+      Timestamp de criação da ordem
+    </ResponseField>
+    <ResponseField name="brcode" type="string">
+      Código BR PIX (apenas para ordens PIX)
+    </ResponseField>
+    <ResponseField name="qrCodeLink" type="string">
+      URL do QR code (apenas para ordens Binance)
+    </ResponseField>
+    <ResponseField name="invoice" type="string">
+      Fatura Lightning (apenas para ordens Lightning)
+    </ResponseField>
+    <ResponseField name="link" type="string">
+      URL de pagamento para o usuário
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Exemplo de resposta
+
+<CodeGroup>
+
+```json Sucesso (200)
+{
+  "message": "Ordem encontrada",
+  "order": {
+    "id": "ord_12345abcde",
+    "paymentLinkId": "pmt_12345abcde",
+    "value": 100.00,
+    "status": "COMPLETED",
+    "createdAt": "2023-07-15T10:30:00Z",
+    "brcode": "00020101021226940014br.gov.bcb.pix2571api.cryptouse.com/pix/pmt_12345abcde5204000053039865802BR5925CRYPTOUSE PAGAMENTOS SA6009SAO PAULO62070503***63047D37",
+    "link": "https://pay.cryptouse.com/pix/pmt_12345abcde"
+  }
+}
+```
+
+```json Ordem não encontrada (404)
+{
+  "success": false,
+  "error": "Ordem não encontrada"
+}
+```
+
+</CodeGroup>
+
+## Detalhes por tipo de ordem
+
+Dependendo do tipo de ordem, diferentes campos estarão disponíveis na resposta:
+
+### Ordem PIX
+
+- `brcode`: O código BR PIX para pagamento
+- `link`: URL para página de pagamento PIX
+
+### Ordem Binance
+
+- `qrCodeLink`: URL para a imagem do QR code Binance
+- `link`: URL para a página de pagamento Binance
+
+### Ordem Lightning
+
+- `invoice`: String da fatura Lightning Network
+- `link`: URL para a página de pagamento Lightning
+- `satoshis`: Valor em satoshis (opcional)
+
+## Uso comum
+
+Este endpoint é comumente usado para:
+
+1. **Verificar o status de pagamento**: Consulte regularmente para verificar se um pagamento foi recebido
+2. **Gerar recibos**: Após um pagamento ser concluído, recupere os detalhes para gerar recibos
+3. **Reconciliação financeira**: Compare os pagamentos recebidos com os esperados
+4. **Suporte ao cliente**: Resolva problemas de pagamento verificando o status atual
+
+## Notas
+
+- Para pagamentos que foram reembolsados, o status será `REFUND`
+- Ordens com status `PENDING` por mais tempo que o esperado podem indicar problemas com o pagamento
+- Você pode configurar webhooks para receber atualizações automáticas sobre mudanças de status 

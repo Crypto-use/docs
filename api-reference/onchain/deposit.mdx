@@ -1,0 +1,106 @@
+---
+title: 'Criar Depósito'
+api: 'POST /api/v1/onchain/deposit'
+description: 'Crie uma nova ordem de depósito e gere um endereço para receber fundos'
+---
+
+## Criar ordem de depósito
+
+Este endpoint cria uma nova ordem de depósito onchain e gera um endereço de carteira para receber fundos na blockchain.
+
+### Requisição
+
+<ParamField body="value" type="number" required>
+  O valor em BRL a ser depositado
+</ParamField>
+
+<ParamField body="asset" type="string" required>
+  O tipo de criptomoeda a ser utilizado
+  
+  Valores possíveis: `USDT`, `USDC`, `DAI`, `BUSD`
+</ParamField>
+
+<ParamField body="network" type="string" required>
+  A rede blockchain a ser utilizada
+  
+  Valores possíveis: `eth`, `bsc`, `polygon`
+</ParamField>
+
+### Exemplo de requisição
+
+```bash
+curl -X POST "https://api.cryptouse.com/api/v1/onchain/deposit" \
+  -H "Content-Type: application/json" \
+  -H "X-App-ID: sua_chave_de_api" \
+  -d '{
+    "value": 100.00,
+    "asset": "USDT",
+    "network": "bsc"
+  }'
+```
+
+### Resposta
+
+<ResponseField name="order" type="object">
+  <Expandable title="Propriedades">
+    <ResponseField name="address" type="string">
+      Endereço da carteira para o depósito
+    </ResponseField>
+    <ResponseField name="paymentLinkId" type="string">
+      Identificador único para o pagamento
+    </ResponseField>
+    <ResponseField name="network" type="string">
+      Rede blockchain utilizada
+    </ResponseField>
+    <ResponseField name="asset" type="string">
+      Tipo de criptomoeda
+    </ResponseField>
+    <ResponseField name="amount" type="number">
+      A quantidade em criptomoeda a ser depositada
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Exemplo de resposta
+
+<CodeGroup>
+
+```json Sucesso (201)
+{
+  "order": {
+    "address": "0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t",
+    "paymentLinkId": "pmt_12345abcde",
+    "network": "bsc",
+    "asset": "USDT",
+    "amount": 23.74
+  }
+}
+```
+
+```json Erro de rede inválida (400)
+{
+  "message": "Rede blockchain inválida",
+  "supportedNetworks": ["eth", "bsc", "polygon"]
+}
+```
+
+```json Não autorizado (401)
+{
+  "message": "Chave de API inválida ou não autorizada"
+}
+```
+
+```json Erro interno (500)
+{
+  "message": "Ocorreu um erro ao processar sua solicitação"
+}
+```
+
+</CodeGroup>
+
+## Notas
+
+- O endereço gerado é exclusivo para esta ordem e não deve ser reutilizado
+- A taxa de conversão BRL para criptomoeda é fixada no momento da criação da ordem
+- Após o depósito ser recebido e confirmado na blockchain, um webhook será acionado
+- A ordem expira após 24 horas se nenhum pagamento for recebido 

@@ -1,0 +1,156 @@
+---
+title: 'Consultar Ordem Crypto-PIX'
+api: 'POST /api/v1/crypto-pix/order/get'
+description: 'Obtenha detalhes de um pagamento Crypto-PIX'
+---
+
+## Consultar detalhes do pagamento Crypto-PIX
+
+Este endpoint retorna informações detalhadas sobre um pagamento Crypto-PIX específico usando seu ID.
+
+### Requisição
+
+<ParamField body="id" type="string" required>
+  O ID codificado em base64 da ordem de pagamento
+</ParamField>
+
+### Exemplo de requisição
+
+```bash
+curl -X POST "https://api.cryptouse.com/api/v1/crypto-pix/order/get" \
+  -H "Content-Type: application/json" \
+  -H "X-App-ID: sua_chave_de_api" \
+  -d '{
+    "id": "Y3B0cGl4XzEyMzQ1YWJjZGU="
+  }'
+```
+
+### Resposta
+
+<ResponseField name="value" type="number">
+  O valor em BRL do pagamento
+</ResponseField>
+
+<ResponseField name="cryptoValue" type="number">
+  O valor em criptomoeda
+</ResponseField>
+
+<ResponseField name="updatedAt" type="string" format="date-time">
+  Timestamp da última atualização
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Status atual do pagamento
+  
+  Valores possíveis: `PENDING`, `COMPLETED`, `REFUNDED`, `PARTIAL_ORDER`, `FAILED`
+</ResponseField>
+
+<ResponseField name="network" type="string">
+  Rede blockchain usada para o pagamento
+</ResponseField>
+
+<ResponseField name="address" type="string">
+  Endereço da carteira de criptomoeda
+</ResponseField>
+
+<ResponseField name="receivedValue" type="number">
+  Valor recebido (se pagamento parcial)
+</ResponseField>
+
+<ResponseField name="originalCryptoValue" type="number">
+  Valor original em criptomoeda
+</ResponseField>
+
+<ResponseField name="partialUpdatedAt" type="string" format="date-time">
+  Timestamp de quando o pagamento parcial foi recebido
+</ResponseField>
+
+<ResponseField name="partialBrlValue" type="number">
+  Valor parcial em BRL
+</ResponseField>
+
+<ResponseField name="isPartial" type="boolean">
+  Indica se a ordem foi parcialmente paga
+</ResponseField>
+
+<ResponseField name="remaining" type="number">
+  Valor restante a ser pago, se parcial
+</ResponseField>
+
+### Exemplo de resposta
+
+<CodeGroup>
+
+```json Sucesso - Pagamento Completo (200)
+{
+  "value": 120.50,
+  "cryptoValue": 30.25,
+  "updatedAt": "2023-04-20T15:30:45Z",
+  "status": "COMPLETED",
+  "network": "bsc",
+  "address": "0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t",
+  "receivedValue": 30.25,
+  "originalCryptoValue": 30.25,
+  "partialUpdatedAt": null,
+  "partialBrlValue": null,
+  "isPartial": false,
+  "remaining": 0
+}
+```
+
+```json Sucesso - Pagamento Parcial (200)
+{
+  "value": 120.50,
+  "cryptoValue": 30.25,
+  "updatedAt": "2023-04-20T15:30:45Z",
+  "status": "PARTIAL_ORDER",
+  "network": "bsc",
+  "address": "0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t",
+  "receivedValue": 15.12,
+  "originalCryptoValue": 30.25,
+  "partialUpdatedAt": "2023-04-20T15:15:30Z",
+  "partialBrlValue": 60.25,
+  "isPartial": true,
+  "remaining": 60.25
+}
+```
+
+```json Ordem não encontrada (404)
+{
+  "message": "Ordem não encontrada"
+}
+```
+
+</CodeGroup>
+
+## Status do pagamento
+
+Os status possíveis para um pagamento Crypto-PIX são:
+
+| Status | Descrição |
+|--------|-----------|
+| `PENDING` | A ordem foi criada mas ainda não recebeu pagamento |
+| `COMPLETED` | O pagamento foi recebido, convertido e o PIX foi enviado com sucesso |
+| `PARTIAL_ORDER` | Foi recebido um pagamento parcial em criptomoeda |
+| `REFUNDED` | O pagamento foi reembolsado (por falha na conversão ou no envio do PIX) |
+| `FAILED` | O pagamento falhou por algum motivo |
+
+## Pagamentos parciais
+
+Quando um pagamento parcial é recebido:
+
+1. O status muda para `PARTIAL_ORDER`
+2. O campo `receivedValue` é atualizado com o valor recebido
+3. O campo `partialBrlValue` mostra o valor em BRL já pago
+4. O campo `remaining` indica o valor restante a ser pago
+5. O campo `partialUpdatedAt` é atualizado com o timestamp da transação parcial
+
+## Processamento do PIX
+
+Após receber o pagamento em criptomoeda:
+
+1. Convertemos o valor para BRL
+2. Processamos o pagamento PIX para o destinatário
+3. Atualizamos o status da ordem para `COMPLETED`
+
+Este processo geralmente leva entre 1 e 5 minutos, dependendo da rede blockchain utilizada. 

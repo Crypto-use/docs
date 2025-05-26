@@ -1,0 +1,134 @@
+---
+title: 'Consultar Ordem'
+api: 'GET /api/v1/onchain/order/{id}'
+description: 'Obtenha detalhes de uma ordem onchain específica'
+---
+
+## Obter detalhes de uma ordem onchain
+
+Este endpoint permite recuperar informações sobre uma ordem blockchain específica usando seu ID de link de pagamento.
+
+### Parâmetros de URL
+
+<ParamField path="id" type="string" required>
+  ID do link de pagamento da ordem
+</ParamField>
+
+### Exemplo de requisição
+
+```bash
+curl -X GET "https://api.cryptouse.com/api/v1/onchain/order/pmt_12345abcde" \
+  -H "X-App-ID: sua_chave_de_api"
+```
+
+### Resposta
+
+<ResponseField name="order" type="object">
+  <Expandable title="Propriedades">
+    <ResponseField name="value" type="number">
+      O valor em BRL da ordem
+    </ResponseField>
+    <ResponseField name="cryptoValue" type="number">
+      O valor em criptomoeda
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      Status atual do pagamento
+      
+      Valores possíveis: `PENDING`, `COMPLETED`, `REFUNDED`, `PARTIAL_ORDER`, `FAILED`
+    </ResponseField>
+    <ResponseField name="paymentLinkId" type="string">
+      Identificador único para o pagamento
+    </ResponseField>
+    <ResponseField name="address" type="string">
+      Endereço da carteira de criptomoeda
+    </ResponseField>
+    <ResponseField name="paymentURI" type="string">
+      URI de pagamento para a transação
+    </ResponseField>
+    <ResponseField name="receivedValue" type="number">
+      Valor recebido (se pagamento parcial)
+    </ResponseField>
+    <ResponseField name="originalCryptoValue" type="number">
+      Valor original em criptomoeda
+    </ResponseField>
+    <ResponseField name="receivedFrom" type="string">
+      Endereço que enviou o pagamento
+    </ResponseField>
+    <ResponseField name="partialUpdatedAt" type="string" format="date-time">
+      Timestamp de quando o pagamento parcial foi recebido
+    </ResponseField>
+    <ResponseField name="createdAt" type="string" format="date-time">
+      Timestamp de criação
+    </ResponseField>
+    <ResponseField name="metadata" type="object">
+      <Expandable title="Propriedades">
+        <ResponseField name="orderId" type="string">
+          ID interno da ordem
+        </ResponseField>
+        <ResponseField name="tokenAddress" type="string">
+          Endereço do contrato do token
+        </ResponseField>
+        <ResponseField name="network" type="string">
+          Rede blockchain
+        </ResponseField>
+        <ResponseField name="walletIndex" type="number">
+          Índice da carteira utilizada
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="asset" type="string">
+      Tipo de criptomoeda
+    </ResponseField>
+    <ResponseField name="network" type="string">
+      Rede blockchain utilizada
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Exemplo de resposta
+
+<CodeGroup>
+
+```json Sucesso (200)
+{
+  "order": {
+    "value": 100.00,
+    "cryptoValue": 23.74,
+    "status": "COMPLETED",
+    "paymentLinkId": "pmt_12345abcde",
+    "address": "0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t",
+    "paymentURI": "ethereum:0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t?value=23.74",
+    "receivedValue": 23.74,
+    "originalCryptoValue": 23.74,
+    "receivedFrom": "0xabcdef1234567890abcdef1234567890abcdef12",
+    "partialUpdatedAt": null,
+    "createdAt": "2023-07-15T10:30:00Z",
+    "metadata": {
+      "orderId": "ord_98765zyxwv",
+      "tokenAddress": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "network": "bsc",
+      "walletIndex": 42
+    },
+    "asset": "USDT",
+    "network": "bsc"
+  }
+}
+```
+
+```json Ordem não encontrada (400)
+{
+  "message": "Ordem não encontrada"
+}
+```
+
+</CodeGroup>
+
+## Pagamentos parciais
+
+Quando um pagamento parcial é recebido para uma ordem, o status da ordem muda para `PARTIAL_ORDER` e os campos `receivedValue` e `partialUpdatedAt` são preenchidos com os detalhes do pagamento parcial.
+
+Para ordens com pagamentos parciais, você pode calcular o valor restante a ser pago subtraindo `receivedValue` de `cryptoValue`.
+
+## Monitoramento de ordens
+
+Além de consultar ordens manualmente, você pode configurar webhooks para receber notificações automáticas quando o status de uma ordem mudar. Veja a seção [Webhooks](/essentials/webhooks) para mais detalhes. 

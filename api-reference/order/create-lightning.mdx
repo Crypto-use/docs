@@ -1,0 +1,126 @@
+---
+title: 'Criar Ordem Lightning'
+api: 'POST /api/v1/order/create/lightning'
+description: 'Gere uma nova fatura Lightning Network para o valor especificado'
+---
+
+## Criar nova ordem Lightning
+
+Este endpoint gera uma nova fatura de pagamento Lightning Network para o valor especificado em BRL (que será convertido para satoshis).
+
+### Requisição
+
+<ParamField body="value" type="number" required>
+  O valor do pagamento em BRL (será convertido para satoshis)
+</ParamField>
+
+<ParamField body="email" type="string">
+  Email opcional do cliente
+</ParamField>
+
+<ParamField body="name" type="string">
+  Nome opcional do cliente
+</ParamField>
+
+### Exemplo de requisição
+
+```bash
+curl -X POST "https://api.cryptouse.com/api/v1/order/create/lightning" \
+  -H "Content-Type: application/json" \
+  -H "X-App-ID: sua_chave_de_api" \
+  -d '{
+    "value": 50.00,
+    "email": "cliente@exemplo.com",
+    "name": "João Silva"
+  }'
+```
+
+### Resposta
+
+<ResponseField name="message" type="string">
+  Mensagem de sucesso
+</ResponseField>
+
+<ResponseField name="order" type="object">
+  <Expandable title="Propriedades">
+    <ResponseField name="id" type="string">
+      ID da ordem
+    </ResponseField>
+    <ResponseField name="paymentLinkId" type="string">
+      Identificador único do link de pagamento
+    </ResponseField>
+    <ResponseField name="value" type="number">
+      Valor do pagamento em BRL
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      Status da ordem
+      
+      Valores possíveis: `PENDING`, `COMPLETED`, `CANCELLED`, `FAILED`, `REFUND`
+    </ResponseField>
+    <ResponseField name="invoice" type="string">
+      String da fatura Lightning Network
+    </ResponseField>
+    <ResponseField name="link" type="string">
+      URL de pagamento para o usuário
+    </ResponseField>
+    <ResponseField name="satoshis" type="string">
+      Valor do pagamento em satoshis
+    </ResponseField>
+    <ResponseField name="createdAt" type="string" format="date-time">
+      Timestamp de criação da ordem
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Exemplo de resposta
+
+<CodeGroup>
+
+```json Sucesso (201)
+{
+  "message": "Fatura Lightning criada com sucesso",
+  "order": {
+    "id": "ord_12345abcde",
+    "paymentLinkId": "pmt_12345abcde",
+    "value": 50.00,
+    "status": "PENDING",
+    "invoice": "lnbc1500n1p0nla53pp5j5jz95rz3q65tpk9m8mkm9ze45g0kr5q42dkkcfk4wxtywf5nhqdqqcqzpgxqyz5vqsp5usw4xtnszv9g7g2acu89a26793qmk9ee7vxd5x5w5h9ht28qjq9qyyssqllgz56hkwmxj4z6tqpaj3c4pww7qgzjn266km3vz5kdmzgaacpmxn90zg8xgq2l3ezqxtj5grw4xdj3ya8lc30a9vfwlnv5mwqv8qqfcvdal",
+    "link": "https://pay.cryptouse.com/lightning/pmt_12345abcde",
+    "satoshis": "100000",
+    "createdAt": "2023-07-15T10:30:00Z"
+  }
+}
+```
+
+```json Requisição inválida (400)
+{
+  "success": false,
+  "error": "Valor inválido. O valor mínimo é R$ 1,00"
+}
+```
+
+</CodeGroup>
+
+## Como utilizar
+
+1. Crie a ordem de pagamento usando este endpoint
+2. Apresente a fatura Lightning (`invoice`) para o cliente, preferencialmente como QR code
+3. O cliente pode escanear o QR code com uma carteira Lightning Network compatível
+4. Também é possível fornecer o link de pagamento (`link`) para o cliente
+5. Após a confirmação do pagamento, você receberá um webhook
+6. Verifique o status da ordem usando o endpoint `GET /api/v1/order/{id}`
+
+## Validade da fatura
+
+A fatura Lightning Network gerada tem validade de 60 minutos. Após este período, a fatura expira automaticamente e uma nova fatura precisa ser gerada.
+
+## Taxa de conversão
+
+A taxa de conversão de BRL para satoshis é fixada no momento da criação da ordem. A CryptoUse utiliza a taxa de câmbio média de várias exchanges para garantir a melhor conversão.
+
+## Benefícios da Lightning Network
+
+- **Instantâneo**: Confirmação de pagamento em segundos
+- **Baixo custo**: Taxas de transação mínimas
+- **Ecológico**: Menor consumo de energia em comparação com transações na blockchain principal
+- **Global**: Aceite pagamentos de qualquer lugar do mundo sem restrições 

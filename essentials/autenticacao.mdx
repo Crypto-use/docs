@@ -1,0 +1,47 @@
+---
+title: 'Autenticação'
+description: 'Como autenticar suas requisições com a API CryptoUse'
+---
+
+# Autenticação
+
+A API CryptoUse utiliza chaves de API (App ID) para autenticar todas as requisições. Para usar a API, você precisa obter sua chave através do painel administrativo.
+
+## Obtendo sua chave de API
+
+1. Acesse o [Dashboard CryptoUse](https://dashboard.cryptouse.com)
+2. Navegue até a seção "Configurações" > "API"
+3. Clique em "Gerar nova chave de API"
+4. Guarde sua chave em um local seguro
+
+## Utilizando a chave de API
+
+Todas as requisições à API devem incluir sua chave de API no cabeçalho HTTP `X-App-ID`:
+
+```bash
+curl -X POST "https://api.cryptouse.com/api/v1/onchain/deposit" \
+  -H "Content-Type: application/json" \
+  -H "X-App-ID: sua_chave_de_api" \
+  -d '{
+    "value": 100.00,
+    "asset": "USDT",
+    "network": "bsc"
+  }'
+```
+
+## Ambiente de desenvolvimento
+
+Para testes em ambiente de desenvolvimento, você pode gerar chaves de API específicas para desenvolvimento que não processam transações reais:
+
+1. No dashboard, vá para "Configurações" > "API"
+2. Selecione "Ambiente de Desenvolvimento"
+3. Clique em "Gerar nova chave de API de teste"
+
+As chaves de desenvolvimento funcionam exatamente como as chaves de produção, mas operam em um ambiente sandbox separado.
+
+## Segurança
+
+- Nunca compartilhe sua chave de API
+- Não inclua sua chave de API diretamente no código-fonte que será compartilhado ou em repositórios públicos
+- Configure variáveis de ambiente ou cofres seguros para armazenar suas chaves
+- Se suspeitar que sua chave foi comprometida, revogue-a imediatamente no dashboard e gere uma nova 

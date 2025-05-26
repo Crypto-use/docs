@@ -1,0 +1,160 @@
+---
+title: 'Criar Depósito'
+api: 'POST /api/v1/onchain/deposit'
+description: 'Crie uma nova ordem de depósito e gere um endereço para receber fundos'
+---
+
+Retorna os detalhes de uma nova ordem de depósito onchain, incluindo um endereço de carteira para receber fundos na blockchain.
+
+## Autorizações
+
+<ParamField header="X-App-ID" type="string" required>
+  Chave de API para autenticação
+</ParamField>
+
+Autenticação via API key no formato `X-App-ID: <sua_chave_de_api>`, onde `<sua_chave_de_api>` é sua chave de API.
+
+## Parâmetros da requisição
+
+### Body
+
+<ParamField body="value" type="number" required>
+  O valor em BRL a ser depositado
+</ParamField>
+
+<ParamField body="asset" type="string" required>
+  O tipo de criptomoeda a ser utilizado
+  
+  Valores possíveis: `USDT`, `USDC`, `DAI`, `BUSD`
+</ParamField>
+
+<ParamField body="network" type="string" required>
+  A rede blockchain a ser utilizada
+  
+  Valores possíveis: `eth`, `bsc`, `polygon`
+</ParamField>
+
+## Resposta
+
+<ResponseField name="order" type="object">
+  <Expandable title="Propriedades">
+    <ResponseField name="address" type="string">
+      Endereço da carteira para o depósito
+    </ResponseField>
+    <ResponseField name="paymentLinkId" type="string">
+      Identificador único para o pagamento
+    </ResponseField>
+    <ResponseField name="network" type="string">
+      Rede blockchain utilizada
+    </ResponseField>
+    <ResponseField name="asset" type="string">
+      Tipo de criptomoeda
+    </ResponseField>
+    <ResponseField name="amount" type="number">
+      A quantidade em criptomoeda a ser depositada
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<CodeGroup>
+
+```json Sucesso (201)
+{
+  "order": {
+    "address": "0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t",
+    "paymentLinkId": "pmt_12345abcde",
+    "network": "bsc",
+    "asset": "USDT",
+    "amount": 23.74
+  }
+}
+```
+
+```json Erro de rede inválida (400)
+{
+  "message": "Rede blockchain inválida",
+  "supportedNetworks": ["eth", "bsc", "polygon"]
+}
+```
+
+```json Não autorizado (401)
+{
+  "message": "Chave de API inválida ou não autorizada"
+}
+```
+
+```json Erro interno (500)
+{
+  "message": "Ocorreu um erro ao processar sua solicitação"
+}
+```
+
+</CodeGroup>
+
+## Exemplos de código
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST "https://api.cryptouse.com/api/v1/onchain/deposit" \
+  -H "Content-Type: application/json" \
+  -H "X-App-ID: sua_chave_de_api" \
+  -d '{
+    "value": 100.00,
+    "asset": "USDT",
+    "network": "bsc"
+  }'
+```
+
+```javascript Node.js
+const axios = require('axios');
+
+const apiKey = 'sua_chave_de_api';
+const data = {
+  value: 100.00,
+  asset: 'USDT',
+  network: 'bsc'
+};
+
+axios.post('https://api.cryptouse.com/api/v1/onchain/deposit', data, {
+  headers: {
+    'Content-Type': 'application/json',
+    'X-App-ID': apiKey
+  }
+})
+.then(response => {
+  console.log(response.data);
+})
+.catch(error => {
+  console.error('Erro:', error.response.data);
+});
+```
+
+```python Python
+import requests
+import json
+
+api_key = 'sua_chave_de_api'
+url = 'https://api.cryptouse.com/api/v1/onchain/deposit'
+headers = {
+    'Content-Type': 'application/json',
+    'X-App-ID': api_key
+}
+data = {
+    'value': 100.00,
+    'asset': 'USDT',
+    'network': 'bsc'
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+</CodeGroup>
+
+## Notas
+
+- O endereço gerado é exclusivo para esta ordem e não deve ser reutilizado
+- A taxa de conversão BRL para criptomoeda é fixada no momento da criação da ordem
+- Após o depósito ser recebido e confirmado na blockchain, você receberá uma notificação
+- A ordem expira após 24 horas se nenhum pagamento for recebido 

@@ -1,102 +1,80 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
-  "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+  "name": "CryptoUse",
+  "logo": {
+    "light": "/images/cryptologo.png",
+    "dark": "/images/cryptologo.png",
+    "width": "220px",
+    "height": "auto"
   },
   "favicon": "/favicon.svg",
+  "colors": {
+    "primary": "#0055FF",
+    "light": "#4D9CFF",
+    "dark": "#0046CC"
+  },
+  "topbarLinks": [
+    {
+      "name": "Dashboard",
+      "url": "https://dashboard.cryptouse.com"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Dashboard",
+    "url": "https://dashboard.cryptouse.com"
+  },
   "navigation": {
+    "languages": [],
+    "versions": [],
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Documentation",
         "groups": [
           {
-            "group": "Get Started",
+            "group": "Introduction",
+            "pages": ["index"]
+          },
+          {
+            "group": "API Reference",
+            "pages": ["api-reference/endpoint/introduction"]
+          },
+          {
+            "group": "Onchain",
             "pages": [
-              "index",
-              "quickstart",
-              "development"
+              "api-reference/endpoint/onchain/index",
+              "api-reference/endpoint/onchain/deposit",
+              "api-reference/endpoint/onchain/withdraw",
+              "api-reference/endpoint/onchain/order"
             ]
           },
           {
-            "group": "Essentials",
+            "group": "Application Order",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/settings",
-              "essentials/navigation",
-              "essentials/reusable-snippets"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API Reference",
-        "groups": [
-          {
-            "group": "API Documentation",
-            "pages": [
-              "api-reference/introduction"
+              "api-reference/endpoint/order/index",
+              "api-reference/endpoint/order/create-binance",
+              "api-reference/endpoint/order/create-lightning",
+              "api-reference/endpoint/order/create-pix",
+              "api-reference/endpoint/order/get-order"
             ]
           },
           {
-            "group": "Endpoint Examples",
+            "group": "Crypto Pix",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/endpoint/crypto-pix/index",
+              "api-reference/endpoint/crypto-pix/pay",
+              "api-reference/endpoint/crypto-pix/get-order"
             ]
           }
         ]
       }
     ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
+    "dropdowns": [],
+    "anchors": []
   },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
-  },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
+  "footerSocials": {
+    "twitter": "https://twitter.com/mintlify",
+    "github": "https://github.com/cryptouse",
+    "linkedin": "https://www.linkedin.com/company/cryptouse"
   }
 }

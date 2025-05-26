@@ -1,0 +1,151 @@
+---
+title: 'Consultar Ordem'
+api: 'GET /api/v1/order/{id}'
+description: 'Obtenha detalhes de uma ordem de pagamento'
+---
+
+## Consultar detalhes da ordem
+
+Este endpoint retorna informações detalhadas sobre uma ordem de pagamento específica usando seu ID de link de pagamento.
+
+### Parâmetros de caminho
+
+<ParamField path="id" type="string" required>
+  ID do link de pagamento ou identificador de pagamento
+</ParamField>
+
+### Exemplo de requisição
+
+```bash
+curl -X GET "https://api.cryptouse.com/api/v1/order/pmt_12345abcde" \
+  -H "Content-Type: application/json" \
+  -H "X-App-ID: sua_chave_de_api"
+```
+
+### Resposta
+
+<ResponseField name="message" type="string">
+  Mensagem de sucesso
+</ResponseField>
+
+<ResponseField name="order" type="object">
+  <Expandable title="Propriedades">
+    <ResponseField name="id" type="string">
+      ID da ordem
+    </ResponseField>
+    <ResponseField name="paymentLinkId" type="string">
+      Identificador único do link de pagamento
+    </ResponseField>
+    <ResponseField name="value" type="number">
+      Valor do pagamento em BRL
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      Status da ordem
+      
+      Valores possíveis: `PENDING`, `COMPLETED`, `CANCELLED`, `FAILED`, `REFUND`
+    </ResponseField>
+    <ResponseField name="createdAt" type="string" format="date-time">
+      Timestamp de criação da ordem
+    </ResponseField>
+    <ResponseField name="brcode" type="string">
+      Código BR do PIX (apenas para ordens PIX)
+    </ResponseField>
+    <ResponseField name="qrCodeLink" type="string">
+      URL do QR code (apenas para ordens Binance)
+    </ResponseField>
+    <ResponseField name="invoice" type="string">
+      Fatura Lightning (apenas para ordens Lightning)
+    </ResponseField>
+    <ResponseField name="link" type="string">
+      URL de pagamento para o usuário
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Exemplo de resposta
+
+<CodeGroup>
+
+```json Sucesso - Ordem PIX (200)
+{
+  "message": "Ordem encontrada",
+  "order": {
+    "id": "ord_67890fghij",
+    "paymentLinkId": "pmt_12345abcde",
+    "value": 200.00,
+    "status": "COMPLETED",
+    "createdAt": "2023-04-20T15:00:00Z",
+    "brcode": "00020101021226890014br.gov.bcb.pix2557invoice.cryptouse.com/pmt_12345abcde5204000053039865802BR5913Empresa PIX6008Sao Paulo62290525pmt_12345abcde1234567890123640230A",
+    "link": "https://pay.cryptouse.com/pix/pmt_12345abcde"
+  }
+}
+```
+
+```json Sucesso - Ordem Binance (200)
+{
+  "message": "Ordem encontrada",
+  "order": {
+    "id": "ord_67890fghij",
+    "paymentLinkId": "pmt_12345abcde",
+    "value": 150.00,
+    "status": "PENDING",
+    "createdAt": "2023-04-20T15:00:00Z",
+    "qrCodeLink": "https://api.cryptouse.com/qrcode/pmt_12345abcde.png",
+    "link": "https://pay.cryptouse.com/binance/pmt_12345abcde"
+  }
+}
+```
+
+```json Sucesso - Ordem Lightning (200)
+{
+  "message": "Ordem encontrada",
+  "order": {
+    "id": "ord_67890fghij",
+    "paymentLinkId": "pmt_12345abcde",
+    "value": 50.00,
+    "status": "PENDING",
+    "createdAt": "2023-04-20T15:00:00Z",
+    "invoice": "lnbc10n1p3hj507pp5enpzk7xalj8k4qssu8k42nrhxd6gehhwdvjxs9w39m9u2xcyxsdqqcqzpgxqyz5vqsp5usyc0ezh9l7m4drja5g56xe6aqsmuhts6j6fxurpsju75h8tn76q9qyyssqj4zs3jtm764fgdcgx067j8tjdvqhh2rpnl6v0ntlc6j8w4jt6qmx3fjc9vl0x9s3gkqfm4qsf2j9c3z7zjtmf6mw2886xdnljnrgpf9ykx6",
+    "link": "https://pay.cryptouse.com/lightning/pmt_12345abcde"
+  }
+}
+```
+
+```json Ordem não encontrada (404)
+{
+  "success": false,
+  "error": "Ordem não encontrada"
+}
+```
+
+</CodeGroup>
+
+## Tipos de ordem
+
+Este endpoint funciona para todos os tipos de ordem suportados:
+
+- **Ordens PIX**: Contém o campo `brcode`
+- **Ordens Binance**: Contém o campo `qrCodeLink`
+- **Ordens Lightning**: Contém o campo `invoice`
+
+O tipo de ordem é determinado automaticamente com base no ID fornecido.
+
+## Status da ordem
+
+A consulta de status é útil para verificar se um pagamento foi recebido. Os possíveis status incluem:
+
+| Status | Descrição |
+|--------|-----------|
+| `PENDING` | A ordem foi criada e aguarda pagamento |
+| `COMPLETED` | O pagamento foi recebido e confirmado |
+| `CANCELLED` | A ordem foi cancelada |
+| `FAILED` | O pagamento falhou |
+| `REFUND` | O pagamento foi reembolsado |
+
+## Recomendações de uso
+
+É recomendado consultar o status da ordem periodicamente quando:
+
+1. Um usuário inicia um pagamento
+2. Você precisa verificar manualmente o status de uma ordem
+3. Após receber uma notificação de atualização de status 

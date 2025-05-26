@@ -1,0 +1,65 @@
+---
+title: 'Indo para produção'
+description: 'Prepare seu aplicativo para o ambiente de produção'
+---
+
+# Indo para produção
+
+Quando estiver pronto para disponibilizar sua integração em produção, siga estes passos para garantir uma transição suave e segura.
+
+## Checklist de produção
+
+Antes de lançar seu aplicativo em produção, verifique os seguintes itens:
+
+### 1. Obtenha chaves de API de produção
+
+Substitua suas chaves de desenvolvimento por chaves de produção:
+
+1. Acesse o [Dashboard CryptoUse](https://dashboard.cryptouse.com)
+2. Navegue até "Configurações" > "API"
+3. Clique em "Gerar nova chave de API de produção"
+4. Atualize seu ambiente com a nova chave
+
+### 2. Configure webhooks de produção
+
+Certifique-se de que seus endpoints de webhook estão configurados corretamente:
+
+- Use URLs HTTPS para seus webhooks de produção
+- Verifique a assinatura de todos os webhooks recebidos
+- Tenha certeza de que o servidor de produção pode ser acessado pela CryptoUse
+
+### 3. Testes de integração
+
+Execute testes de integração completos no ambiente de produção:
+
+- Teste o fluxo completo de depósitos e saques com valores pequenos
+- Verifique se os webhooks estão sendo recebidos e processados corretamente
+- Teste o comportamento de falhas e recuperação
+
+### 4. Monitore as transações
+
+Implemente monitoramento para suas transações:
+
+- Configure alertas para falhas de transação
+- Mantenha logs detalhados de todas as interações com a API
+- Rastreie o status de cada transação para reconciliação
+
+## Volumes de transação
+
+Se você espera um grande volume de transações, entre em contato com nossa equipe de suporte para discutir seu caso de uso específico e garantir que sua integração esteja otimizada para escala.
+
+## Suporte de produção
+
+Para questões relacionadas ao ambiente de produção:
+
+- Email: suporte@cryptouse.com
+- Horário de atendimento: 24/7 para problemas críticos
+- SLA: Respondemos a questões críticas em até 1 hora
+
+## Melhores práticas
+
+- **Validação**: Valide todos os dados antes de enviá-los à API
+- **Tratamento de erros**: Implemente tratamento robusto de erros e estratégias de retry
+- **Idempotência**: Use IDs de solicitação consistentes para garantir idempotência
+- **Segurança**: Nunca armazene chaves de API no código-fonte ou front-end
+- **Backup**: Mantenha um sistema de backup para dados de transação importantes 

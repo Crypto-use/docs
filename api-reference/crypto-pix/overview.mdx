@@ -1,0 +1,68 @@
+---
+title: 'Visão Geral Crypto Pix'
+description: 'Converta criptomoedas para pagamentos PIX'
+---
+
+# Visão Geral Crypto Pix
+
+A API Crypto Pix da CryptoUse permite que você converta criptomoedas para pagamentos PIX, facilitando a interoperabilidade entre o mundo cripto e o sistema bancário tradicional brasileiro.
+
+## O que é Crypto Pix?
+
+Crypto Pix é uma solução que permite:
+
+1. Escanear um QR code PIX padrão
+2. Pagar o valor equivalente em criptomoeda
+3. A CryptoUse realiza automaticamente a conversão e o pagamento PIX em BRL
+
+Esta funcionalidade é perfeita para usuários que mantêm seus ativos em criptomoedas, mas precisam realizar pagamentos em estabelecimentos que aceitam apenas PIX.
+
+## Recursos principais
+
+- **Conversão automática**: Converta criptomoedas para BRL em tempo real
+- **Pagamento direto**: Pague qualquer QR code PIX usando criptomoedas
+- **Confirmação rápida**: Receba confirmação do pagamento assim que processado
+- **Suporte a múltiplas redes**: Realize pagamentos a partir de diferentes blockchains
+
+## Redes suportadas
+
+Atualmente, o Crypto Pix suporta as seguintes redes blockchain:
+
+| Rede | Identificador | Descrição |
+|------|---------------|-----------|
+| Ethereum | `eth` | Rede principal do Ethereum |
+| Binance Smart Chain | `bsc` | Rede Binance Smart Chain |
+
+## Como funciona
+
+1. **Conversão de QR code**: O cliente escaneia um QR code PIX com a aplicação
+2. **Análise do valor**: O sistema calcula o valor equivalente em criptomoeda
+3. **Confirmação**: O cliente confirma o pagamento em criptomoeda
+4. **Processamento**: A CryptoUse converte a criptomoeda e realiza o pagamento PIX
+5. **Finalização**: O cliente recebe a confirmação do pagamento
+
+## Endpoints disponíveis
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| POST | `/api/v1/crypto-pix/onchain/pay` | Processar um pagamento de criptomoeda para PIX |
+| POST | `/api/v1/crypto-pix/order/get` | Obter detalhes de um pagamento Crypto PIX |
+
+## Status de uma transação
+
+Os pagamentos Crypto Pix podem ter os seguintes status:
+
+| Status | Descrição |
+|--------|-----------|
+| `PENDING` | O pagamento foi iniciado e está aguardando confirmação na blockchain |
+| `COMPLETED` | O pagamento foi confirmado e o PIX foi enviado com sucesso |
+| `REFUNDED` | O pagamento foi reembolsado |
+| `PARTIAL_ORDER` | Foi recebido um pagamento parcial para a ordem |
+| `FAILED` | O pagamento falhou |
+
+## Próximos passos
+
+Explore os endpoints específicos para começar a integrar pagamentos Crypto Pix em seu aplicativo:
+
+- [Processar Pagamento](/api-reference/crypto-pix/pay)
+- [Consultar Pagamento](/api-reference/crypto-pix/get) 

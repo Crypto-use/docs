@@ -1,0 +1,63 @@
+---
+title: 'Visão Geral Onchain'
+description: 'Integre pagamentos em diferentes blockchains'
+---
+
+# Visão Geral Onchain
+
+A API Onchain da CryptoUse permite que você aceite e processe transações diretamente em redes blockchain. Esta seção fornece uma visão geral dos endpoints disponíveis para operações onchain.
+
+## Recursos principais
+
+- **Criação de depósitos**: Gere endereços de carteira para receber criptomoedas em diferentes redes.
+- **Saques**: Inicie saques de criptomoedas para endereços externos.
+- **Consulta de ordens**: Verifique o status de ordens e transações em blockchain.
+
+## Redes suportadas
+
+Atualmente, a CryptoUse suporta as seguintes redes blockchain:
+
+| Rede | Identificador | Descrição |
+|------|---------------|-----------|
+| Ethereum | `eth` | Rede principal do Ethereum |
+| Binance Smart Chain | `bsc` | Rede Binance Smart Chain |
+| Polygon | `polygon` | Rede Polygon (anteriormente Matic) |
+
+## Tokens suportados
+
+Os seguintes tokens são suportados em nossas operações onchain:
+
+| Token | Descrição |
+|-------|-----------|
+| USDT | Tether USD Stablecoin |
+| USDC | USD Coin Stablecoin |
+| DAI | DAI Stablecoin |
+| BUSD | Binance USD Stablecoin |
+
+## Endpoints disponíveis
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| POST | `/api/v1/onchain/deposit` | Criar uma nova ordem de depósito |
+| POST | `/api/v1/onchain/withdraw/initiate` | Iniciar uma transação de saque |
+| GET | `/api/v1/onchain/order/{id}` | Obter detalhes de uma ordem onchain |
+
+## Status de uma transação
+
+As transações onchain podem ter os seguintes status:
+
+| Status | Descrição |
+|--------|-----------|
+| `PENDING` | A transação foi criada e está aguardando confirmação na blockchain |
+| `COMPLETED` | A transação foi confirmada e processada com sucesso |
+| `REFUNDED` | A transação foi reembolsada |
+| `PARTIAL_ORDER` | Foi recebido um pagamento parcial para a ordem |
+| `FAILED` | A transação falhou |
+
+## Próximos passos
+
+Explore os endpoints específicos para começar a integrar pagamentos onchain em seu aplicativo:
+
+- [Criar Depósito](/api-reference/onchain/deposit)
+- [Iniciar Saque](/api-reference/onchain/withdraw)
+- [Consultar Ordem](/api-reference/onchain/order) 

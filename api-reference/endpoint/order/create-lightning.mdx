@@ -1,0 +1,126 @@
+---
+title: 'Criar Ordem Lightning'
+api: 'POST /api/v1/order/create/lightning'
+description: 'Crie uma nova ordem de pagamento Lightning Network'
+---
+
+## Criar ordem de pagamento Lightning Network
+
+Este endpoint gera uma nova fatura (invoice) Lightning Network para o valor especificado, permitindo pagamentos rápidos e com baixas taxas em Bitcoin.
+
+### Requisição
+
+<ParamField body="value" type="number" required>
+  O valor do pagamento em BRL (será convertido para satoshis)
+</ParamField>
+
+<ParamField body="email" type="string">
+  Email do cliente (opcional)
+</ParamField>
+
+<ParamField body="name" type="string">
+  Nome do cliente (opcional)
+</ParamField>
+
+### Exemplo de requisição
+
+```bash
+curl -X POST "https://api.cryptouse.com/api/v1/order/create/lightning" \
+  -H "Content-Type: application/json" \
+  -H "X-App-ID: sua_chave_de_api" \
+  -d '{
+    "value": 50.00,
+    "email": "cliente@exemplo.com",
+    "name": "João Silva"
+  }'
+```
+
+### Resposta
+
+<ResponseField name="message" type="string">
+  Mensagem de sucesso
+</ResponseField>
+
+<ResponseField name="order" type="object">
+  <Expandable title="Propriedades">
+    <ResponseField name="id" type="string">
+      ID da ordem
+    </ResponseField>
+    <ResponseField name="paymentLinkId" type="string">
+      Identificador único do link de pagamento
+    </ResponseField>
+    <ResponseField name="value" type="number">
+      Valor do pagamento em BRL
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      Status da ordem
+      
+      Valores possíveis: `PENDING`, `COMPLETED`, `CANCELLED`, `FAILED`, `REFUND`
+    </ResponseField>
+    <ResponseField name="invoice" type="string">
+      String da fatura Lightning Network
+    </ResponseField>
+    <ResponseField name="link" type="string">
+      URL de pagamento para o usuário
+    </ResponseField>
+    <ResponseField name="satoshis" type="string">
+      Valor do pagamento em satoshis
+    </ResponseField>
+    <ResponseField name="createdAt" type="string" format="date-time">
+      Timestamp de criação da ordem
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Exemplo de resposta
+
+<CodeGroup>
+
+```json Sucesso (201)
+{
+  "message": "Fatura Lightning criada com sucesso",
+  "order": {
+    "id": "ord_67890fghij",
+    "paymentLinkId": "pmt_12345abcde",
+    "value": 50.00,
+    "status": "PENDING",
+    "invoice": "lnbc10n1p3hj507pp5enpzk7xalj8k4qssu8k42nrhxd6gehhwdvjxs9w39m9u2xcyxsdqqcqzpgxqyz5vqsp5usyc0ezh9l7m4drja5g56xe6aqsmuhts6j6fxurpsju75h8tn76q9qyyssqj4zs3jtm764fgdcgx067j8tjdvqhh2rpnl6v0ntlc6j8w4jt6qmx3fjc9vl0x9s3gkqfm4qsf2j9c3z7zjtmf6mw2886xdnljnrgpf9ykx6",
+    "link": "https://pay.cryptouse.com/lightning/pmt_12345abcde",
+    "satoshis": "10000",
+    "createdAt": "2023-04-20T15:00:00Z"
+  }
+}
+```
+
+```json Requisição inválida (400)
+{
+  "success": false,
+  "error": "Valor de pagamento inválido"
+}
+```
+
+</CodeGroup>
+
+## O que é Lightning Network?
+
+Lightning Network é uma solução de "segunda camada" construída sobre o Bitcoin que permite transações quase instantâneas e com taxas extremamente baixas. É ideal para:
+
+- Micropagamentos
+- Transações de alto volume
+- Pagamentos em tempo real
+
+## Pagamento via Lightning Network
+
+Os usuários podem pagar uma fatura Lightning das seguintes formas:
+
+1. Escaneando o QR code com uma carteira Lightning compatível
+2. Copiando e colando a string da fatura em sua carteira Lightning
+3. Clicando no link de pagamento em um dispositivo com uma carteira Lightning instalada
+
+## Tempo de expiração
+
+As faturas Lightning Network expiram após 15 minutos se não forem pagas.
+
+## Conversão de valor
+
+O valor em BRL é convertido para satoshis (a menor unidade do Bitcoin) no momento da criação da fatura, utilizando a taxa de câmbio atual. O campo `satoshis` na resposta indica o valor exato a ser pago. 

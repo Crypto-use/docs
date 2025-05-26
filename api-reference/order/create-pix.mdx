@@ -1,0 +1,142 @@
+---
+title: 'Criar Ordem PIX'
+api: 'POST /api/v1/order/create/pix'
+description: 'Gere um novo QR code PIX para o valor especificado'
+---
+
+## Criar nova ordem PIX
+
+Este endpoint gera um novo QR code PIX para o valor especificado em BRL.
+
+### Requisição
+
+<ParamField body="orderRequest" type="string">
+  Referência da solicitação de ordem
+</ParamField>
+
+<ParamField body="merchant" type="string">
+  Referência do comerciante
+</ParamField>
+
+<ParamField body="value" type="number" required>
+  O valor do pagamento em BRL
+</ParamField>
+
+<ParamField body="orderId" type="string">
+  ID personalizado opcional da ordem
+</ParamField>
+
+<ParamField body="name" type="string" required>
+  Nome do cliente
+</ParamField>
+
+<ParamField body="cnpj" type="string">
+  Número CNPJ da empresa
+</ParamField>
+
+<ParamField body="cpf" type="string">
+  Número CPF pessoal opcional
+</ParamField>
+
+### Exemplo de requisição
+
+```bash
+curl -X POST "https://api.cryptouse.com/api/v1/order/create/pix" \
+  -H "Content-Type: application/json" \
+  -H "X-App-ID: sua_chave_de_api" \
+  -d '{
+    "value": 75.50,
+    "name": "Maria Santos",
+    "cpf": "123.456.789-00",
+    "orderId": "pedido_456"
+  }'
+```
+
+### Resposta
+
+<ResponseField name="message" type="string">
+  Mensagem de sucesso
+</ResponseField>
+
+<ResponseField name="pixOrder" type="object">
+  <Expandable title="Propriedades">
+    <ResponseField name="paymentLinkId" type="string">
+      Identificador único do link de pagamento
+    </ResponseField>
+    <ResponseField name="value" type="number">
+      Valor do pagamento em BRL
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      Status da ordem
+      
+      Valores possíveis: `PENDING`, `COMPLETED`, `CANCELLED`, `FAILED`, `REFUND`
+    </ResponseField>
+    <ResponseField name="brcode" type="string">
+      Código BR para pagamento PIX
+    </ResponseField>
+    <ResponseField name="link" type="string">
+      URL de pagamento para o usuário
+    </ResponseField>
+    <ResponseField name="createdAt" type="string" format="date-time">
+      Timestamp de criação da ordem
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Exemplo de resposta
+
+<CodeGroup>
+
+```json Sucesso (200)
+{
+  "message": "Ordem PIX criada com sucesso",
+  "pixOrder": {
+    "paymentLinkId": "pmt_12345abcde",
+    "value": 75.50,
+    "status": "PENDING",
+    "brcode": "00020101021226940014br.gov.bcb.pix2571api.cryptouse.com/pix/pmt_12345abcde5204000053039865802BR5925CRYPTOUSE PAGAMENTOS SA6009SAO PAULO62070503***63047D37",
+    "link": "https://pay.cryptouse.com/pix/pmt_12345abcde",
+    "createdAt": "2023-07-15T10:30:00Z"
+  }
+}
+```
+
+```json Requisição inválida (400)
+{
+  "message": "Nome do cliente é obrigatório"
+}
+```
+
+</CodeGroup>
+
+## Como utilizar
+
+1. Crie a ordem de pagamento usando este endpoint
+2. Apresente o QR code PIX gerado a partir do `brcode` para o cliente
+3. O cliente pode escanear o QR code com qualquer aplicativo de banco que suporte PIX
+4. Também é possível fornecer o link de pagamento (`link`) para o cliente
+5. Após a confirmação do pagamento, você receberá um webhook
+6. Verifique o status da ordem usando o endpoint `GET /api/v1/order/{id}`
+
+## Validade do PIX
+
+O QR code PIX gerado tem validade de 24 horas. Após este período, a ordem expira automaticamente e um novo QR code precisa ser gerado.
+
+## Tipos de QR code PIX
+
+A CryptoUse suporta dois tipos de QR code PIX:
+
+1. **QR code estático**: Para pagamentos recorrentes com o mesmo valor
+2. **QR code dinâmico**: Para pagamentos únicos com valores específicos (usado neste endpoint)
+
+## Taxas
+
+A taxa para pagamentos via PIX é de 1.0% sobre o valor da transação. Esta taxa é automaticamente deduzida do valor recebido.
+
+## Limites
+
+| Tipo de PIX | Horário | Limite |
+|-------------|---------|--------|
+| Normal | Horário comercial (10h-17h) | R$ 100.000 |
+| Normal | Fora do horário comercial | R$ 10.000 |
+| PIX QR | Qualquer horário | R$ 500.000 | 

@@ -1,0 +1,110 @@
+---
+title: 'Iniciar Saque'
+api: 'POST /api/v1/onchain/withdraw/initiate'
+description: 'Inicie uma transação de saque para um endereço externo'
+---
+
+## Iniciar transação de saque
+
+Este endpoint inicia uma transação de saque da carteira do usuário para um endereço específico na blockchain.
+
+### Requisição
+
+<ParamField body="toAddress" type="string" required>
+  Endereço de carteira de destino
+</ParamField>
+
+<ParamField body="value" type="number" required>
+  O valor a ser sacado
+</ParamField>
+
+<ParamField body="token" type="string">
+  O token a ser sacado (padrão: USDT)
+  
+  Valores possíveis: `USDT`, `USDC`, `DAI`, `BUSD`
+</ParamField>
+
+### Exemplo de requisição
+
+```bash
+curl -X POST "https://api.cryptouse.com/api/v1/onchain/withdraw/initiate" \
+  -H "Content-Type: application/json" \
+  -H "X-App-ID: sua_chave_de_api" \
+  -d '{
+    "toAddress": "0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t",
+    "value": 50.00,
+    "token": "USDT"
+  }'
+```
+
+### Resposta
+
+<ResponseField name="message" type="string">
+  Mensagem de sucesso
+</ResponseField>
+
+<ResponseField name="transactionHash" type="string">
+  O hash da transação na blockchain
+</ResponseField>
+
+<ResponseField name="success" type="boolean">
+  Indica se o saque foi bem-sucedido
+</ResponseField>
+
+### Exemplo de resposta
+
+<CodeGroup>
+
+```json Sucesso (200)
+{
+  "message": "Saque iniciado com sucesso",
+  "transactionHash": "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
+  "success": true
+}
+```
+
+```json Requisição inválida (400)
+{
+  "message": "Dados inválidos na requisição",
+  "error": "Saldo insuficiente para o saque"
+}
+```
+
+```json Não autorizado (401)
+{
+  "message": "Chave de API inválida ou não autorizada"
+}
+```
+
+```json Erro interno (500)
+{
+  "message": "Ocorreu um erro ao processar sua solicitação",
+  "success": false
+}
+```
+
+</CodeGroup>
+
+## Taxas de saque
+
+Cada saque inclui duas taxas:
+
+1. **Taxa de rede**: Custo da transação na blockchain (gas)
+2. **Taxa de serviço**: Taxa cobrada pela CryptoUse (0.5% do valor sacado)
+
+O valor total deduzido da conta será: `valor_do_saque + taxa_de_rede + taxa_de_serviço`
+
+## Limites de saque
+
+| Tipo de conta | Limite diário | Limite por transação |
+|---------------|---------------|----------------------|
+| Padrão        | R$ 10.000     | R$ 5.000             |
+| Verificada    | R$ 50.000     | R$ 10.000            |
+| Empresarial   | R$ 100.000    | R$ 25.000            |
+
+## Notas
+
+- As transações de saque são irreversíveis após confirmação na blockchain
+- O tempo de processamento varia de acordo com a rede blockchain selecionada
+- Um webhook será acionado quando a transação for confirmada na blockchain
+- Saques para endereços de exchange podem exigir um campo memo/tag que deve ser incluído no endereço 

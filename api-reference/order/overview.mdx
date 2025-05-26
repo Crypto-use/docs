@@ -1,0 +1,64 @@
+---
+title: 'Visão Geral de Ordens'
+description: 'Integre diversos métodos de pagamento em seu aplicativo'
+---
+
+# Visão Geral de Ordens
+
+A API de Ordens da CryptoUse permite que você gere e gerencie diferentes tipos de ordens de pagamento. Esta seção fornece uma visão geral dos endpoints disponíveis para operações com ordens.
+
+## Recursos principais
+
+- **Ordens Binance**: Gere QR codes de pagamento via Binance Pay
+- **Lightning Network**: Crie faturas de pagamento Bitcoin via Lightning Network
+- **PIX**: Gere QR codes PIX para pagamentos em reais
+- **Consulta de ordens**: Verifique o status de ordens e pagamentos
+
+## Métodos de pagamento
+
+A CryptoUse oferece diferentes métodos de pagamento para atender às necessidades do seu negócio:
+
+| Método | Descrição | Velocidade | Custo |
+|--------|-----------|------------|-------|
+| Binance | Pagamento via Binance Pay | Instantâneo | 0.5% |
+| Lightning | Pagamento via Lightning Network | Instantâneo | 0.7% |
+| PIX | Pagamento via PIX | Até 10 min | 1.0% |
+
+## Ciclo de vida da ordem
+
+Todas as ordens seguem um ciclo de vida definido:
+
+1. **Criação**: A ordem é criada com status `PENDING`
+2. **Pagamento**: O cliente efetua o pagamento
+3. **Confirmação**: O pagamento é confirmado e a ordem muda para `COMPLETED`
+4. **Finalização**: A ordem é finalizada e os fundos são disponibilizados
+
+Em caso de falha ou expiração, a ordem pode assumir o status `CANCELLED` ou `FAILED`.
+
+## Status das ordens
+
+| Status | Descrição |
+|--------|-----------|
+| `PENDING` | A ordem foi criada e está aguardando pagamento |
+| `COMPLETED` | O pagamento foi confirmado e processado com sucesso |
+| `CANCELLED` | A ordem foi cancelada pelo usuário ou sistema |
+| `FAILED` | Ocorreu um erro durante o processamento da ordem |
+| `REFUND` | O valor pago foi reembolsado |
+
+## Endpoints disponíveis
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| POST | `/api/v1/order/create` | Criar uma nova ordem Binance |
+| POST | `/api/v1/order/create/lightning` | Criar uma nova ordem Lightning |
+| POST | `/api/v1/order/create/pix` | Criar uma nova ordem PIX |
+| GET | `/api/v1/order/{id}` | Obter detalhes de uma ordem |
+
+## Próximos passos
+
+Explore os endpoints específicos para começar a integrar pagamentos em seu aplicativo:
+
+- [Criar Ordem Binance](/api-reference/order/create)
+- [Criar Ordem Lightning](/api-reference/order/create-lightning)
+- [Criar Ordem PIX](/api-reference/order/create-pix)
+- [Consultar Ordem](/api-reference/order/get) 

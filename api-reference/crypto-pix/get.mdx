@@ -1,0 +1,156 @@
+---
+title: 'Consultar Pagamento'
+api: 'POST /api/v1/crypto-pix/order/get'
+description: 'Obtenha detalhes de um pagamento Crypto PIX específico'
+---
+
+## Obter detalhes do pagamento Crypto PIX
+
+Este endpoint permite recuperar informações sobre um pagamento Crypto PIX específico usando seu ID.
+
+### Requisição
+
+<ParamField body="id" type="string" required>
+  O ID codificado em base64 da ordem de pagamento
+</ParamField>
+
+### Exemplo de requisição
+
+```bash
+curl -X POST "https://api.cryptouse.com/api/v1/crypto-pix/order/get" \
+  -H "Content-Type: application/json" \
+  -H "X-App-ID: sua_chave_de_api" \
+  -d '{
+    "id": "Y3J5cHRvX3BpeF8xMjM0NWFiY2Rl"
+  }'
+```
+
+### Resposta
+
+<ResponseField name="value" type="number">
+  O valor em BRL do pagamento
+</ResponseField>
+
+<ResponseField name="cryptoValue" type="number">
+  O valor em criptomoeda
+</ResponseField>
+
+<ResponseField name="updatedAt" type="string" format="date-time">
+  Timestamp da última atualização
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Status atual do pagamento
+  
+  Valores possíveis: `PENDING`, `COMPLETED`, `REFUNDED`, `PARTIAL_ORDER`, `FAILED`
+</ResponseField>
+
+<ResponseField name="network" type="string">
+  Rede blockchain utilizada para o pagamento
+</ResponseField>
+
+<ResponseField name="address" type="string">
+  Endereço da carteira de criptomoeda
+</ResponseField>
+
+<ResponseField name="receivedValue" type="number">
+  Valor recebido (se pagamento parcial)
+</ResponseField>
+
+<ResponseField name="originalCryptoValue" type="number">
+  Valor original em criptomoeda
+</ResponseField>
+
+<ResponseField name="partialUpdatedAt" type="string" format="date-time">
+  Timestamp de quando o pagamento parcial foi recebido
+</ResponseField>
+
+<ResponseField name="partialBrlValue" type="number">
+  Valor parcial em BRL
+</ResponseField>
+
+<ResponseField name="isPartial" type="boolean">
+  Se a ordem está parcialmente paga
+</ResponseField>
+
+<ResponseField name="remaining" type="number">
+  Valor restante a ser pago se parcial
+</ResponseField>
+
+### Exemplo de resposta
+
+<CodeGroup>
+
+```json Sucesso (200)
+{
+  "value": 100.00,
+  "cryptoValue": 23.74,
+  "updatedAt": "2023-07-15T10:45:00Z",
+  "status": "COMPLETED",
+  "network": "bsc",
+  "address": "0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t",
+  "receivedValue": 23.74,
+  "originalCryptoValue": 23.74,
+  "partialUpdatedAt": null,
+  "partialBrlValue": null,
+  "isPartial": false,
+  "remaining": 0
+}
+```
+
+```json Pagamento parcial
+{
+  "value": 100.00,
+  "cryptoValue": 23.74,
+  "updatedAt": "2023-07-15T10:45:00Z",
+  "status": "PARTIAL_ORDER",
+  "network": "bsc",
+  "address": "0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t",
+  "receivedValue": 10.00,
+  "originalCryptoValue": 23.74,
+  "partialUpdatedAt": "2023-07-15T10:40:00Z",
+  "partialBrlValue": 42.12,
+  "isPartial": true,
+  "remaining": 13.74
+}
+```
+
+```json Pagamento não encontrado (404)
+{
+  "message": "Pagamento não encontrado"
+}
+```
+
+</CodeGroup>
+
+## Status de pagamento
+
+O campo `status` indica o estado atual do pagamento Crypto PIX:
+
+| Status | Descrição |
+|--------|-----------|
+| `PENDING` | O pagamento foi iniciado e está aguardando recebimento de fundos |
+| `COMPLETED` | O pagamento foi confirmado e o PIX foi enviado com sucesso |
+| `REFUNDED` | O pagamento foi reembolsado |
+| `PARTIAL_ORDER` | Foi recebido um pagamento parcial para a ordem |
+| `FAILED` | Ocorreu um erro durante o processamento do pagamento |
+
+## Pagamentos parciais
+
+Se um valor inferior ao esperado for recebido, o status será alterado para `PARTIAL_ORDER` e os seguintes campos serão preenchidos:
+
+- `receivedValue`: O valor em criptomoeda recebido
+- `partialUpdatedAt`: O timestamp de quando o pagamento parcial foi recebido
+- `partialBrlValue`: O valor equivalente em BRL do pagamento parcial
+- `isPartial`: Será `true` para pagamentos parciais
+- `remaining`: O valor restante em criptomoeda a ser pago
+
+## Monitoramento de status
+
+Recomendamos verificar o status do pagamento periodicamente até que o status seja `COMPLETED` ou `FAILED`. 
+
+Alternativamente, você pode configurar webhooks para receber notificações automáticas quando o status do pagamento mudar.
+
+## Expiração
+
+Pagamentos Crypto PIX expiram após 60 minutos se permanecerem no status `PENDING`. Após este período, qualquer tentativa de pagamento será rejeitada e o status mudará para `FAILED`. 
