@@ -1,6 +1,6 @@
 ---
 title: 'Criar Ordem Lightning'
-api: 'POST /api/v1/order/create/lightning'
+api: 'POST /api/order/create/lightning'
 description: 'Gere uma nova fatura Lightning Network para o valor especificado'
 ---
 
@@ -25,7 +25,7 @@ Este endpoint gera uma nova fatura de pagamento Lightning Network para o valor e
 ### Exemplo de requisição
 
 ```bash
-curl -X POST "https://api.cryptouse.com/api/v1/order/create/lightning" \
+curl -X POST "https://api.cryptouse.com/api/order/create/lightning" \
   -H "Content-Type: application/json" \
   -H "X-App-ID: sua_chave_de_api" \
   -d '{
@@ -108,7 +108,7 @@ curl -X POST "https://api.cryptouse.com/api/v1/order/create/lightning" \
 3. O cliente pode escanear o QR code com uma carteira Lightning Network compatível
 4. Também é possível fornecer o link de pagamento (`link`) para o cliente
 5. Após a confirmação do pagamento, você receberá um webhook
-6. Verifique o status da ordem usando o endpoint `GET /api/v1/order/{id}`
+6. Verifique o status da ordem usando o endpoint `GET /api/order/{id}`
 
 ## Validade da fatura
 

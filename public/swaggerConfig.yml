@@ -1,0 +1,9 @@
+openapi: '3.0.3'
+info:
+  title: 'cryptouse-server'
+  description: 'cryptouse-server'
+  version: '1.0.0'
+servers:
+  - description: 'Production server'
+security:
+  - AppID: []

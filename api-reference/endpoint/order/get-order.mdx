@@ -1,6 +1,6 @@
 ---
 title: 'Consultar Ordem'
-api: 'GET /api/v1/order/{id}'
+api: 'GET /api/order/{id}'
 description: 'Obtenha detalhes de uma ordem de pagamento'
 ---
 
@@ -17,7 +17,7 @@ Este endpoint retorna informações detalhadas sobre uma ordem de pagamento espe
 ### Exemplo de requisição
 
 ```bash
-curl -X GET "https://api.cryptouse.com/api/v1/order/pmt_12345abcde" \
+curl -X GET "https://api.cryptouse.com/api/order/pmt_12345abcde" \
   -H "Content-Type: application/json" \
   -H "X-App-ID: sua_chave_de_api"
 ```
