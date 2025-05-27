@@ -17,7 +17,7 @@ Este endpoint retorna informações detalhadas sobre uma ordem de pagamento espe
 ### Exemplo de requisição
 
 ```bash
-curl -X GET "https://api.cryptouse.com/api/order/pmt_12345abcde" \
+curl -X GET "https://api.cryptouse.com.br/api/order/pmt_12345abcde" \
   -H "Content-Type: application/json" \
   -H "X-App-ID: sua_chave_de_api"
 ```
@@ -90,7 +90,7 @@ curl -X GET "https://api.cryptouse.com/api/order/pmt_12345abcde" \
     "value": 150.00,
     "status": "PENDING",
     "createdAt": "2023-04-20T15:00:00Z",
-    "qrCodeLink": "https://api.cryptouse.com/qrcode/pmt_12345abcde.png",
+    "qrCodeLink": "https://api.cryptouse.com.br/qrcode/pmt_12345abcde.png",
     "link": "https://pay.cryptouse.com/binance/pmt_12345abcde"
   }
 }
