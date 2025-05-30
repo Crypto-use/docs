@@ -1,6 +1,6 @@
 ---
 title: 'Consultar Ordem Onchain'
-api: 'GET /api/onchain/order/{id}'
+api: 'GET /api/v1/onchain/order/{id}'
 description: 'Obtenha detalhes de uma ordem blockchain específica'
 ---
 
@@ -17,7 +17,7 @@ Este endpoint retorna informações detalhadas sobre uma ordem blockchain espec�
 ### Exemplo de requisição
 
 ```bash
-curl -X GET "https://api.cryptouse.com.br/api/onchain/order/pmt_12345abcde" \
+curl -X GET "https://api.cryptouse.com.br/api/v1/onchain/order/pmt_12345abcde" \
   -H "Content-Type: application/json" \
   -H "X-App-ID: sua_chave_de_api"
 ```
