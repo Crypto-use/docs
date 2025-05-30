@@ -1,6 +1,6 @@
 ---
 title: 'Processar Pagamento PIX'
-api: 'POST /api/crypto-pix/onchain/pay'
+api: 'POST /api/v1/crypto-pix/onchain/pay'
 description: 'Converta criptomoeda e faça um pagamento PIX'
 ---
 
@@ -23,7 +23,7 @@ Este endpoint permite converter criptomoeda e realizar um pagamento PIX usando o
 ### Exemplo de requisição
 
 ```bash
-curl -X POST "https://api.cryptouse.com.br/api/crypto-pix/onchain/pay" \
+curl -X POST "https://api.cryptouse.com.br/api/v1/crypto-pix/onchain/pay" \
   -H "Content-Type: application/json" \
   -H "X-App-ID: sua_chave_de_api" \
   -d '{

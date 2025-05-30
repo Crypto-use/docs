@@ -27,9 +27,9 @@ Endpoints para operações diretas em blockchain, como depósitos e saques.
 
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
-| POST | `/api/onchain/deposit` | Criar uma ordem de depósito |
-| POST | `/api/onchain/withdraw/initiate` | Iniciar um saque |
-| GET | `/api/onchain/order/{id}` | Consultar ordem onchain |
+| POST | `/api/v1/onchain/deposit` | Criar uma ordem de depósito |
+| POST | `/api/v1/onchain/withdraw/initiate` | Iniciar um saque |
+| GET | `/api/v1/onchain/order/{id}` | Consultar ordem onchain |
 
 ### Application Order
 
@@ -37,10 +37,10 @@ Endpoints para criar e gerenciar ordens de pagamento em diferentes métodos.
 
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
-| POST | `/api/order/create` | Criar ordem Binance |
-| POST | `/api/order/create/lightning` | Criar ordem Lightning |
-| POST | `/api/order/create/pix` | Criar ordem PIX |
-| GET | `/api/order/{id}` | Consultar ordem |
+| POST | `/api/v1/order/create` | Criar ordem Binance |
+| POST | `/api/v1/order/create/lightning` | Criar ordem Lightning |
+| POST | `/api/v1/order/create/pix` | Criar ordem PIX |
+| GET | `/api/v1/order/{id}` | Consultar ordem |
 
 ### Crypto Pix
 
@@ -48,8 +48,8 @@ Endpoints para converter criptomoedas para pagamentos PIX.
 
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
-| POST | `/api/crypto-pix/onchain/pay` | Processar pagamento crypto → PIX |
-| POST | `/api/crypto-pix/order/get` | Consultar pagamento |
+| POST | `/api/v1/crypto-pix/onchain/pay` | Processar pagamento crypto → PIX |
+| POST | `/api/v1/crypto-pix/order/get` | Consultar pagamento |
 
 ## Formatos de Resposta
 
@@ -64,3 +64,6 @@ Todas as respostas da API são retornadas no formato JSON. Os códigos de status
 | 404 | Recurso não encontrado |
 | 500 | Erro interno do servidor |
 
+## Versionamento
+
+Nossa API é versionada no caminho da URL. A versão atual é `v1`. 

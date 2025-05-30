@@ -1,6 +1,6 @@
 ---
 title: 'Processar Pagamento'
-api: 'POST /api/crypto-pix/onchain/pay'
+api: 'POST /api/v1/crypto-pix/onchain/pay'
 description: 'Converta criptomoeda e realize um pagamento PIX usando o QR code fornecido'
 ---
 
@@ -23,7 +23,7 @@ Este endpoint processa um pagamento de criptomoeda para PIX, convertendo o valor
 ### Exemplo de requisição
 
 ```bash
-curl -X POST "https://api.cryptouse.com.br/api/crypto-pix/onchain/pay" \
+curl -X POST "https://api.cryptouse.com.br/api/v1/crypto-pix/onchain/pay" \
   -H "Content-Type: application/json" \
   -H "X-App-ID: sua_chave_de_api" \
   -d '{
@@ -109,4 +109,4 @@ O tempo de processamento depende da rede blockchain escolhida:
 
 Após iniciar um pagamento Crypto PIX, você deve verificar seu status usando o endpoint:
 
-`POST /api/crypto-pix/order/get` com o `payCryptoPixId` retornado nesta resposta. 
+`POST /api/v1/crypto-pix/order/get` com o `payCryptoPixId` retornado nesta resposta. 

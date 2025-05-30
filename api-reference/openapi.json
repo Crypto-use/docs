@@ -16,7 +16,7 @@
     }
   ],
   "paths": {
-    "/api/onchain/deposit": {
+    "/api/v1/onchain/deposit": {
       "post": {
         "tags": [
           "Onchain"
@@ -164,7 +164,7 @@
         }
       }
     },
-    "/api/onchain/withdraw/initiate": {
+    "/api/v1/onchain/withdraw/initiate": {
       "post": {
         "tags": [
           "Onchain"
@@ -296,7 +296,7 @@
         }
       }
     },
-    "/api/onchain/order/{id}": {
+    "/api/v1/onchain/order/{id}": {
       "get": {
         "tags": [
           "Onchain"
@@ -434,7 +434,7 @@
         }
       }
     },
-    "/api/order/create": {
+    "/api/v1/order/create": {
       "post": {
         "tags": [
           "Application Order"
@@ -579,7 +579,7 @@
         }
       }
     },
-    "/api/order/create/lightning": {
+    "/api/v1/order/create/lightning": {
       "post": {
         "tags": [
           "Application Order"
@@ -703,7 +703,7 @@
         }
       }
     },
-    "/api/order/create/pix": {
+    "/api/v1/order/create/pix": {
       "post": {
         "tags": [
           "Application Order"
@@ -832,7 +832,7 @@
         }
       }
     },
-    "/api/order/{id}": {
+    "/api/v1/order/{id}": {
       "get": {
         "tags": [
           "Application Order"
@@ -944,7 +944,7 @@
         }
       }
     },
-    "/api/crypto-pix/onchain/pay": {
+    "/api/v1/crypto-pix/onchain/pay": {
       "post": {
         "tags": [
           "Crypto Pix"
@@ -1049,7 +1049,7 @@
         }
       }
     },
-    "/api/crypto-pix/order/get": {
+    "/api/v1/crypto-pix/order/get": {
       "post": {
         "tags": [
           "Crypto Pix"

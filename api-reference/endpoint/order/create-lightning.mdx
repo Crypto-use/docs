@@ -1,6 +1,6 @@
 ---
 title: 'Criar Ordem Lightning'
-api: 'POST /api/order/create/lightning'
+api: 'POST /api/v1/order/create/lightning'
 description: 'Crie uma nova ordem de pagamento Lightning Network'
 ---
 
@@ -25,7 +25,7 @@ Este endpoint gera uma nova fatura (invoice) Lightning Network para o valor espe
 ### Exemplo de requisição
 
 ```bash
-curl -X POST "https://api.cryptouse.com.br/api/order/create/lightning" \
+curl -X POST "https://api.cryptouse.com.br/api/v1/order/create/lightning" \
   -H "Content-Type: application/json" \
   -H "X-App-ID: sua_chave_de_api" \
   -d '{

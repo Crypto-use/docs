@@ -1,6 +1,6 @@
 ---
 title: 'Consultar Pagamento'
-api: 'POST /api/crypto-pix/order/get'
+api: 'POST /api/v1/crypto-pix/order/get'
 description: 'Obtenha detalhes de um pagamento Crypto PIX específico'
 ---
 
@@ -17,7 +17,7 @@ Este endpoint permite recuperar informações sobre um pagamento Crypto PIX espe
 ### Exemplo de requisição
 
 ```bash
-curl -X POST "https://api.cryptouse.com.br/api/crypto-pix/order/get" \
+curl -X POST "https://api.cryptouse.com.br/api/v1/crypto-pix/order/get" \
   -H "Content-Type: application/json" \
   -H "X-App-ID: sua_chave_de_api" \
   -d '{

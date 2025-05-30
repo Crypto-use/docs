@@ -1,6 +1,6 @@
 ---
 title: 'Criar Depósito'
-api: 'POST /api/onchain/deposit'
+api: 'POST /api/v1/onchain/deposit'
 description: 'Crie uma nova ordem de depósito e gere um endereço para receber fundos'
 ---
 
@@ -96,7 +96,7 @@ Autenticação via API key no formato `X-App-ID: <sua_chave_de_api>`, onde `<sua
 <CodeGroup>
 
 ```bash cURL
-curl -X POST "https://api.cryptouse.com.br/api/onchain/deposit" \
+curl -X POST "https://api.cryptouse.com.br/api/v1/onchain/deposit" \
   -H "Content-Type: application/json" \
   -H "X-App-ID: sua_chave_de_api" \
   -d '{
@@ -116,7 +116,7 @@ const data = {
   network: 'bsc'
 };
 
-axios.post('https://api.cryptouse.com.br/api/onchain/deposit', data, {
+axios.post('https://api.cryptouse.com.br/api/v1/onchain/deposit', data, {
   headers: {
     'Content-Type': 'application/json',
     'X-App-ID': apiKey
@@ -135,7 +135,7 @@ import requests
 import json
 
 api_key = 'sua_chave_de_api'
-url = 'https://api.cryptouse.com.br/api/onchain/deposit'
+url = 'https://api.cryptouse.com.br/api/v1/onchain/deposit'
 headers = {
     'Content-Type': 'application/json',
     'X-App-ID': api_key
