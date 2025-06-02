@@ -7,6 +7,7 @@
   },
   "servers": [
     {
+      "url": "https://api.cryptouse.com.br",
       "description": "Production server"
     }
   ],
