@@ -31,7 +31,7 @@ Este endpoint cria uma nova ordem de depósito onchain e gera um endereço de ca
 ```bash
 curl -X POST "https://api.cryptouse.com.br/api/v1/onchain/deposit" \
   -H "Content-Type: application/json" \
-  -H "X-App-ID: sua_chave_de_api" \
+  -H "Authorization: Bearer seu_token_aqui" \
   -d '{
     "value": 100.00,
     "asset": "USDT",

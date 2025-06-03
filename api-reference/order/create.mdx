@@ -31,7 +31,7 @@ Este endpoint gera um novo QR code de pagamento Binance Pay para o valor especif
 ```bash
 curl -X POST "https://api.cryptouse.com.br/api/v1/order/create" \
   -H "Content-Type: application/json" \
-  -H "X-App-ID: sua_chave_de_api" \
+  -H "Authorization: Bearer seu_token_aqui" \
   -d '{
     "value": 100.00,
     "payerId": "cliente_123",
