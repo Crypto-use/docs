@@ -1,0 +1,70 @@
+---
+title: 'PIX'
+description: 'Guia passo a passo para cadastrar seu webhook na plataforma CryptoUse'
+---
+
+# Como cadastrar o Webhook para pagamentos via Pix
+
+Você pode cadastrar facilmente um webhook através do painel da CryptoUse. Siga o passo a passo abaixo para receber notificações em tempo real sempre que uma ordem PIX for paga (`PIX:ORDER_SUCCESS`).
+
+## Passo a passo
+Na seção de perfil do usuário, procure por API/Webhooks.
+![Formulário de cadastro de webhook](/images/webhook-profile-section.png)
+No canto superior direito, clique em "Adicionar webhook".
+![Formulário de cadastro de webhook](/images/add-webhook.png)
+Preencha as informações necessárias para criar seu webhook.
+![Formulário de cadastro de webhook](/images/pix-webhook.png)
+
+## 📝 Preenchendo o formulário
+
+### 🔹 **Nome**
+- Descrição livre para você identificar o webhook.
+- Exemplo: `Webhook de pedidos pagos PIX`.
+
+---
+
+### 🔹 **Evento**
+- Selecione o evento que deseja escutar.
+- Para receber notificações quando uma ordem PIX for paga, escolha:  
+`PIX:ORDER_SUCCESS`.
+
+---
+
+### 🔹 **URL**
+- Endereço (endpoint) da sua aplicação que irá receber as notificações.
+- Deve estar acessível publicamente e aceitar requisições POST no formato JSON.
+
+Exemplo:  
+`https://meusite.com/api/webhooks/pix-order-success`
+
+---
+
+## 🔐 **Cabeçalhos HTTP (Opcional)**
+
+Aqui você pode adicionar autenticações ou configurações específicas da sua API.
+
+### Cabeçalhos recomendados:
+
+| Cabeçalho                | Valor                 | Descrição                                                  |
+|--------------------------|-----------------------|------------------------------------------------------------|
+| `Accept`                 | `application/json`    | Define que a requisição aceita JSON                        |
+| `Content-Type`           | `application/json`    | Formato da requisição                                      |
+| `X-Cryptouse-Signature`  | Gerado automaticamente| Assinatura HMAC para validação da origem                   |
+| `Authorization`          | Seu token, opcional | Use caso seu endpoint exija autenticação adicional         |
+
+---
+
+## 🚀 Após configurar
+
+1. Clique em **Salvar**.
+2. Seu webhook estará ativo e passará a receber notificações sempre que uma ordem PIX for paga.
+
+## 🔗 Exemplo de Payload recebido
+
+```json
+{
+  "universalUrl": "00020126840014br.gov.bcb.pix2562qrcode.transfeera....",
+  "createdAt": "2025-06-03T13:52:34.048Z",
+  "value": "500",
+  "event": "PIX:ORDER_SUCCESS"
+}

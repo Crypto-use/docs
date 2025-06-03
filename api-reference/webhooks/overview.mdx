@@ -1,0 +1,29 @@
+---
+title: 'Visão Geral de Webhooks'
+description: 'Receba notificações em tempo real sobre eventos importantes nas suas ordens'
+---
+
+# Visão Geral de Webhooks
+
+Os webhooks da CryptoUse permitem que sua aplicação receba notificações automáticas sempre que determinados eventos ocorrem nas ordens. Isso elimina a necessidade de consultas constantes à API para verificar o status.
+
+## Recursos principais
+
+- **Notificações em tempo real**: Saiba imediatamente quando uma ordem for paga.
+- **Automatização de processos**: Atualize o status dos seus pedidos, estoques ou serviços automaticamente.
+- **Facilidade de integração**: Configure endpoints personalizados em poucos minutos.
+
+## Eventos disponíveis
+
+| Evento                | Descrição                               |
+|-----------------------|------------------------------------------|
+| `PIX:ORDER_SUCCESS`   | Ordem PIX paga com sucesso              |
+| *(em breve)*          | Novos eventos serão adicionados futuramente |
+
+## Ciclo de vida de um Webhook
+
+1. **Cadastro**: Você informa a URL do seu endpoint na plataforma.
+2. **Evento**: Quando o evento ocorre (ex.: pagamento confirmado), a CryptoUse envia uma requisição HTTP POST para a URL cadastrada.
+3. **Processamento**: Sua aplicação recebe os dados do evento e executa as ações desejadas.
+4. **Confirmação**: Seu servidor deve responder com status HTTP `200 OK` para confirmar o recebimento. Caso contrário, novas tentativas de entrega serão feitas.
+
