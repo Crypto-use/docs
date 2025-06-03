@@ -25,7 +25,7 @@ Este endpoint permite converter criptomoeda e realizar um pagamento PIX usando o
 ```bash
 curl -X POST "https://api.cryptouse.com.br/api/v1/crypto-pix/onchain/pay" \
   -H "Content-Type: application/json" \
-  -H "X-App-ID: sua_chave_de_api" \
+  -H "Authorization: Bearer seu_token_aqui" \
   -d '{
     "qrcode": "00020101021226890014br.gov.bcb.pix2557brcode.example.com/pix/v2/cobv/9d36b84f10194c88ab8b9113b94fb24825204000053039865802BR5913EMPRESA TESTE6008SAO PAULO62070503***6304E2CA",
     "network": "bsc"

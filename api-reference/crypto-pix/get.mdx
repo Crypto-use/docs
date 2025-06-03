@@ -19,7 +19,7 @@ Este endpoint permite recuperar informações sobre um pagamento Crypto PIX espe
 ```bash
 curl -X POST "https://api.cryptouse.com.br/api/v1/crypto-pix/order/get" \
   -H "Content-Type: application/json" \
-  -H "X-App-ID: sua_chave_de_api" \
+  -H "Authorization: Bearer seu_token_aqui" \
   -d '{
     "id": "Y3J5cHRvX3BpeF8xMjM0NWFiY2Rl"
   }'

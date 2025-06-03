@@ -1,27 +1,27 @@
 ---
 title: 'Autenticação'
-description: 'Como autenticar suas requisições com a API CryptoUse'
+description: 'Como autenticar suas requisições com a API CryptoUse usando Bearer Token'
 ---
 
 # Autenticação
 
-A API CryptoUse utiliza chaves de API (App ID) para autenticar todas as requisições. Para usar a API, você precisa obter sua chave através do painel administrativo.
+A API CryptoUse utiliza autenticação via **Bearer Token** para validar todas as requisições. Para acessar a API, você deve gerar um token de acesso através do painel administrativo.
 
-## Obtendo sua chave de API
+## Obtendo seu Bearer Token
 
-1. Acesse o [Dashboard CryptoUse](https://dashboard.cryptouse.com)
-2. Navegue até a seção "Configurações" > "API"
-3. Clique em "Gerar nova chave de API"
-4. Guarde sua chave em um local seguro
+1. Acesse o [Painel CryptoUse](https://cryptouse.com.br/profile)
+2. Navegue até a seção **"API/Webhooks"**
+3. Clique em **"Gerar Token"** ou **"Adicionar API"**
+4. Copie seu token e armazene em um local seguro. Este token será utilizado nas autenticações.
 
-## Utilizando a chave de API
+## Como utilizar o Bearer Token
 
-Todas as requisições à API devem incluir sua chave de API no cabeçalho HTTP `X-App-ID`:
+Inclua o token no cabeçalho HTTP `Authorization` em todas as requisições, no seguinte formato:
 
 ```bash
 curl -X POST "https://api.cryptouse.com.br/api/v1/onchain/deposit" \
   -H "Content-Type: application/json" \
-  -H "X-App-ID: sua_chave_de_api" \
+  -H "Authorization: Bearer seu_token_aqui" \
   -d '{
     "value": 100.00,
     "asset": "USDT",

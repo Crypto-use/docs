@@ -1,1200 +1,24 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "cryptouse-server",
-    "description": "cryptous-server",
+    "title": "Cryptouse API",
+    "description": "API documentation for Cryptouse services, including on-chain deposits, PIX payments, and order management.",
     "version": "1.0.0"
   },
   "servers": [
     {
       "url": "https://api.cryptouse.com.br",
-      "description": "Production server"
+      "description": "Production Server"
     }
   ],
-  "security": [
-    {
-      "AppID": []
-    }
-  ],
-  "paths": {
-    "/api/v1/onchain/deposit": {
-      "post": {
-        "tags": [
-          "Onchain"
-        ],
-        "summary": "Create a new deposit order",
-        "description": "Create a new blockchain deposit order and generate a wallet address for receiving funds",
-        "security": [
-          {
-            "appId": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "value",
-                  "asset",
-                  "network"
-                ],
-                "properties": {
-                  "value": {
-                    "type": "number",
-                    "description": "The value in BRL to deposit"
-                  },
-                  "asset": {
-                    "type": "string",
-                    "description": "The cryptocurrency asset type",
-                    "enum": [
-                      "USDT",
-                      "USDC",
-                      "DAI",
-                      "BUSD"
-                    ]
-                  },
-                  "network": {
-                    "type": "string",
-                    "description": "Blockchain network to use",
-                    "enum": [
-                      "eth",
-                      "bsc",
-                      "polygon"
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Deposit order created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "order": {
-                      "type": "object",
-                      "properties": {
-                        "address": {
-                          "type": "string",
-                          "description": "Wallet address for the deposit"
-                        },
-                        "paymentLinkId": {
-                          "type": "string",
-                          "description": "Unique identifier for the payment"
-                        },
-                        "network": {
-                          "type": "string",
-                          "description": "Blockchain network used"
-                        },
-                        "asset": {
-                          "type": "string",
-                          "description": "Cryptocurrency asset type"
-                        },
-                        "amount": {
-                          "type": "number",
-                          "description": "The amount in cryptocurrency to be deposited"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "description": "Error message"
-                    },
-                    "supportedNetworks": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "description": "Available networks (only included when network is invalid)"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "description": "Error message"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "description": "Error message"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/onchain/withdraw/initiate": {
-      "post": {
-        "tags": [
-          "Onchain"
-        ],
-        "summary": "Initiate a withdrawal transaction",
-        "description": "Start a blockchain withdrawal transaction from the user's wallet to a specified address",
-        "security": [
-          {
-            "appId": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "toAddress",
-                  "value"
-                ],
-                "properties": {
-                  "toAddress": {
-                    "type": "string",
-                    "description": "Destination wallet address"
-                  },
-                  "value": {
-                    "type": "number",
-                    "description": "The amount to withdraw"
-                  },
-                  "token": {
-                    "type": "string",
-                    "description": "The token to withdraw (defaults to USDT)",
-                    "default": "USDT",
-                    "enum": [
-                      "USDT",
-                      "USDC",
-                      "DAI",
-                      "BUSD"
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Withdrawal initiated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "description": "Success message"
-                    },
-                    "transactionHash": {
-                      "type": "string",
-                      "description": "The blockchain transaction hash"
-                    },
-                    "success": {
-                      "type": "boolean",
-                      "description": "Indicates if the withdrawal was successful"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "description": "Error message"
-                    },
-                    "error": {
-                      "type": "string",
-                      "description": "Detailed error information"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "description": "Error message"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "description": "Error message"
-                    },
-                    "success": {
-                      "type": "boolean",
-                      "default": false,
-                      "description": "Indicates if the operation was successful"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/onchain/order/{id}": {
-      "get": {
-        "tags": [
-          "Onchain"
-        ],
-        "summary": "Get details of an onchain order",
-        "description": "Retrieve information about a specific blockchain order by its payment link ID",
-        "security": [
-          {
-            "appId": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Payment link ID of the order",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Order details retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "order": {
-                      "type": "object",
-                      "properties": {
-                        "value": {
-                          "type": "number",
-                          "description": "The value in BRL of the order"
-                        },
-                        "cryptoValue": {
-                          "type": "number",
-                          "description": "The value in cryptocurrency"
-                        },
-                        "status": {
-                          "type": "string",
-                          "description": "Current status of the payment",
-                          "enum": [
-                            "PENDING",
-                            "COMPLETED",
-                            "REFUNDED",
-                            "PARTIAL_ORDER",
-                            "FAILED"
-                          ]
-                        },
-                        "paymentLinkId": {
-                          "type": "string",
-                          "description": "Unique identifier for the payment"
-                        },
-                        "address": {
-                          "type": "string",
-                          "description": "Cryptocurrency wallet address"
-                        },
-                        "paymentURI": {
-                          "type": "string",
-                          "description": "Payment URI for the transaction"
-                        },
-                        "receivedValue": {
-                          "type": "number",
-                          "description": "Value received (if partial payment)"
-                        },
-                        "originalCryptoValue": {
-                          "type": "number",
-                          "description": "Original value in cryptocurrency"
-                        },
-                        "receivedFrom": {
-                          "type": "string",
-                          "description": "Address that sent the payment"
-                        },
-                        "partialUpdatedAt": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "Timestamp when partial payment was received"
-                        },
-                        "createdAt": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "Creation timestamp"
-                        },
-                        "metadata": {
-                          "type": "object",
-                          "properties": {
-                            "orderId": {
-                              "type": "string"
-                            },
-                            "tokenAddress": {
-                              "type": "string"
-                            },
-                            "network": {
-                              "type": "string"
-                            },
-                            "walletIndex": {
-                              "type": "number"
-                            }
-                          }
-                        },
-                        "asset": {
-                          "type": "string",
-                          "description": "Cryptocurrency asset type"
-                        },
-                        "network": {
-                          "type": "string",
-                          "description": "Blockchain network used"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Order not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "description": "Error message"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/order/create": {
-      "post": {
-        "tags": [
-          "Application Order"
-        ],
-        "summary": "Create a new Binance payment order",
-        "description": "Generate a new Binance payment QR code for the specified amount",
-        "security": [
-          {
-            "appId": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "value"
-                ],
-                "properties": {
-                  "value": {
-                    "type": "number",
-                    "description": "The payment amount in BRL"
-                  },
-                  "payerId": {
-                    "type": "string",
-                    "description": "Optional payer ID reference"
-                  },
-                  "merchant": {
-                    "type": "object",
-                    "properties": {
-                      "subMerchantId": {
-                        "type": "string",
-                        "description": "Merchant identifier for the payment"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Order created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "description": "Success message"
-                    },
-                    "order": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string",
-                          "description": "Order ID"
-                        },
-                        "paymentLinkId": {
-                          "type": "string",
-                          "description": "Unique payment link identifier"
-                        },
-                        "value": {
-                          "type": "number",
-                          "description": "Payment amount in BRL"
-                        },
-                        "status": {
-                          "type": "string",
-                          "description": "Order status",
-                          "enum": [
-                            "PENDING",
-                            "COMPLETED",
-                            "CANCELLED",
-                            "FAILED",
-                            "REFUND"
-                          ]
-                        },
-                        "qrCodeLink": {
-                          "type": "string",
-                          "description": "URL for the QR code image"
-                        },
-                        "link": {
-                          "type": "string",
-                          "description": "Payment URL for the user"
-                        },
-                        "createdAt": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "Order creation timestamp"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "error": {
-                      "type": "string",
-                      "description": "Error message"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "error": {
-                      "type": "string",
-                      "description": "Error message"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/order/create/lightning": {
-      "post": {
-        "tags": [
-          "Application Order"
-        ],
-        "summary": "Create a new Lightning Network payment order",
-        "description": "Generate a new Lightning payment invoice for the specified amount",
-        "security": [
-          {
-            "appId": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "value"
-                ],
-                "properties": {
-                  "value": {
-                    "type": "number",
-                    "description": "The payment amount in BRL (will be converted to satoshis)"
-                  },
-                  "email": {
-                    "type": "string",
-                    "description": "Optional customer email"
-                  },
-                  "name": {
-                    "type": "string",
-                    "description": "Optional customer name"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Lightning invoice created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "description": "Success message"
-                    },
-                    "order": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string",
-                          "description": "Order ID"
-                        },
-                        "paymentLinkId": {
-                          "type": "string",
-                          "description": "Unique payment link identifier"
-                        },
-                        "value": {
-                          "type": "number",
-                          "description": "Payment amount in BRL"
-                        },
-                        "status": {
-                          "type": "string",
-                          "description": "Order status",
-                          "enum": [
-                            "PENDING",
-                            "COMPLETED",
-                            "CANCELLED",
-                            "FAILED",
-                            "REFUND"
-                          ]
-                        },
-                        "invoice": {
-                          "type": "string",
-                          "description": "Lightning Network invoice string"
-                        },
-                        "link": {
-                          "type": "string",
-                          "description": "Payment URL for the user"
-                        },
-                        "satoshis": {
-                          "type": "string",
-                          "description": "Payment amount in satoshis"
-                        },
-                        "createdAt": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "Order creation timestamp"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "error": {
-                      "type": "string",
-                      "description": "Error message"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/order/create/pix": {
-      "post": {
-        "tags": [
-          "Application Order"
-        ],
-        "summary": "Create a new PIX payment order",
-        "description": "Generate a new PIX payment QR code for the specified amount",
-        "security": [
-          {
-            "appId": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "value",
-                  "name"
-                ],
-                "properties": {
-                  "orderRequest": {
-                    "type": "string",
-                    "description": "Order request reference"
-                  },
-                  "merchant": {
-                    "type": "string",
-                    "description": "Merchant reference"
-                  },
-                  "value": {
-                    "type": "number",
-                    "description": "The payment amount in BRL"
-                  },
-                  "orderId": {
-                    "type": "string",
-                    "description": "Optional custom order ID"
-                  },
-                  "name": {
-                    "type": "string",
-                    "description": "Customer name"
-                  },
-                  "cnpj": {
-                    "type": "string",
-                    "description": "Company CNPJ number"
-                  },
-                  "cpf": {
-                    "type": "string",
-                    "description": "Optional personal CPF number"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Order created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "description": "Success message"
-                    },
-                    "pixOrder": {
-                      "type": "object",
-                      "properties": {
-                        "paymentLinkId": {
-                          "type": "string",
-                          "description": "Unique payment link identifier"
-                        },
-                        "value": {
-                          "type": "number",
-                          "description": "Payment amount in BRL"
-                        },
-                        "status": {
-                          "type": "string",
-                          "description": "Order status",
-                          "enum": [
-                            "PENDING",
-                            "COMPLETED",
-                            "CANCELLED",
-                            "FAILED",
-                            "REFUND"
-                          ]
-                        },
-                        "brcode": {
-                          "type": "string",
-                          "description": "PIX BR code for payment"
-                        },
-                        "link": {
-                          "type": "string",
-                          "description": "Payment URL for the user"
-                        },
-                        "createdAt": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "Order creation timestamp"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "description": "Error message"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/order/{id}": {
-      "get": {
-        "tags": [
-          "Application Order"
-        ],
-        "summary": "Get order details by ID",
-        "description": "Retrieve payment order details with the payment link identifier",
-        "security": [
-          {
-            "appId": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Payment link ID or payment identifier",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Order found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "description": "Success message"
-                    },
-                    "order": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string",
-                          "description": "Order ID"
-                        },
-                        "paymentLinkId": {
-                          "type": "string",
-                          "description": "Unique payment link identifier"
-                        },
-                        "value": {
-                          "type": "number",
-                          "description": "Payment amount in BRL"
-                        },
-                        "status": {
-                          "type": "string",
-                          "description": "Order status",
-                          "enum": [
-                            "PENDING",
-                            "COMPLETED",
-                            "CANCELLED",
-                            "FAILED",
-                            "REFUND"
-                          ]
-                        },
-                        "createdAt": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "Order creation timestamp"
-                        },
-                        "brcode": {
-                          "type": "string",
-                          "description": "PIX BR code (only for PIX orders)"
-                        },
-                        "qrCodeLink": {
-                          "type": "string",
-                          "description": "QR code URL (only for Binance orders)"
-                        },
-                        "invoice": {
-                          "type": "string",
-                          "description": "Lightning invoice (only for Lightning orders)"
-                        },
-                        "link": {
-                          "type": "string",
-                          "description": "Payment URL for the user"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Order not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "error": {
-                      "type": "string",
-                      "description": "Error message"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/crypto-pix/onchain/pay": {
-      "post": {
-        "tags": [
-          "Crypto Pix"
-        ],
-        "summary": "Process a payment from cryptocurrency to PIX",
-        "description": "Convert cryptocurrency and make a PIX payment using the QR code provided",
-        "security": [
-          {
-            "appId": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "qrcode",
-                  "network"
-                ],
-                "properties": {
-                  "qrcode": {
-                    "type": "string",
-                    "description": "The PIX QR code to be processed"
-                  },
-                  "network": {
-                    "type": "string",
-                    "description": "Blockchain network to use (e.g., bsc, eth)",
-                    "enum": [
-                      "bsc",
-                      "eth"
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Payment request created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "pixKey": {
-                          "type": "string",
-                          "description": "The PIX key of the recipient"
-                        },
-                        "payCryptoPixId": {
-                          "type": "string",
-                          "description": "Unique identifier for the payment"
-                        },
-                        "value": {
-                          "type": "number",
-                          "description": "The value in BRL to be paid"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "description": "Error message"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "description": "Error message"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/crypto-pix/order/get": {
-      "post": {
-        "tags": [
-          "Crypto Pix"
-        ],
-        "summary": "Get details of a crypto PIX payment order",
-        "description": "Retrieve information about a specific crypto PIX payment by its ID",
-        "security": [
-          {
-            "appId": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "id"
-                ],
-                "properties": {
-                  "id": {
-                    "type": "string",
-                    "description": "The base64 encoded ID of the payment order"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Payment order details retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PayCryptoPix",
-                  "type": "object",
-                  "properties": {
-                    "value": {
-                      "type": "number",
-                      "description": "The value in BRL of the payment"
-                    },
-                    "cryptoValue": {
-                      "type": "number",
-                      "description": "The value in cryptocurrency"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time",
-                      "description": "Last update timestamp"
-                    },
-                    "status": {
-                      "type": "string",
-                      "description": "Current status of the payment",
-                      "enum": [
-                        "PENDING",
-                        "COMPLETED",
-                        "REFUNDED",
-                        "PARTIAL_ORDER",
-                        "FAILED"
-                      ]
-                    },
-                    "network": {
-                      "type": "string",
-                      "description": "Blockchain network used for the payment"
-                    },
-                    "address": {
-                      "type": "string",
-                      "description": "Cryptocurrency wallet address"
-                    },
-                    "receivedValue": {
-                      "type": "number",
-                      "description": "Value received (if partial payment)"
-                    },
-                    "originalCryptoValue": {
-                      "type": "number",
-                      "description": "Original value in cryptocurrency"
-                    },
-                    "partialUpdatedAt": {
-                      "type": "string",
-                      "format": "date-time",
-                      "description": "Timestamp when partial payment was received"
-                    },
-                    "partialBrlValue": {
-                      "type": "number",
-                      "description": "Partial value in BRL"
-                    },
-                    "isPartial": {
-                      "type": "boolean",
-                      "description": "Whether the order is partially paid"
-                    },
-                    "remaining": {
-                      "type": "number",
-                      "description": "Remaining value to be paid if partial"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Payment order not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "description": "Error message"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "openapi": {
-      "0": "3",
-      "1": ".",
-      "2": "0",
-      "3": ".",
-      "4": "3"
-    },
-    "info": {
-      "title": "cryptouse-server",
-      "description": "cryptouse-server",
-      "version": "1.0.0"
-    },
-    "servers": {
-      "0": {
-        "description": "Production server"
-      }
-    },
-    "security": {
-      "0": {
-        "AppID": []
-      }
-    }
-  },
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
     "schemas": {
       "OrderOnChain": {
         "type": "object",
@@ -1385,6 +209,11 @@
       }
     }
   },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
   "tags": [
     {
       "name": "Onchain",
@@ -1394,5 +223,1152 @@
       "name": "Crypto Pix",
       "description": "Endpoints for cryptocurrency to PIX payment operations"
     }
-  ]
+  ],
+  "paths": {
+    "/api/v1/onchain/deposit": {
+      "post": {
+        "tags": [
+          "Onchain"
+        ],
+        "summary": "Create blockchain deposit order",
+        "description": "Create a new blockchain deposit order and generate a wallet address for receiving funds.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "asset",
+                  "network"
+                ],
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "description": "The value in BRL to deposit",
+                    "example": 1000
+                  },
+                  "asset": {
+                    "type": "string",
+                    "description": "The cryptocurrency asset type",
+                    "enum": [
+                      "USDT",
+                      "USDC",
+                      "DAI",
+                      "BUSD"
+                    ],
+                    "example": "USDT"
+                  },
+                  "network": {
+                    "type": "string",
+                    "description": "Blockchain network to use",
+                    "enum": [
+                      "eth",
+                      "bsc",
+                      "polygon"
+                    ],
+                    "example": "bsc"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Deposit order created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "address": {
+                      "type": "string",
+                      "description": "Wallet address for the deposit",
+                      "example": "0xabc123def456..."
+                    },
+                    "paymentLinkId": {
+                      "type": "string",
+                      "description": "Unique identifier for the payment",
+                      "example": "dep_001234abcd"
+                    },
+                    "network": {
+                      "type": "string",
+                      "description": "Blockchain network used",
+                      "example": "bsc"
+                    },
+                    "asset": {
+                      "type": "string",
+                      "description": "Cryptocurrency asset type",
+                      "example": "USDT"
+                    },
+                    "amount": {
+                      "type": "number",
+                      "description": "The amount in cryptocurrency to be deposited",
+                      "example": 200
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid request parameters"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized - Invalid App ID"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/onchain/withdraw/initiate": {
+      "post": {
+        "tags": [
+          "Onchain"
+        ],
+        "summary": "Initiate blockchain withdrawal",
+        "description": "Start a blockchain withdrawal transaction from the user's wallet to a specified address.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "toAddress",
+                  "value"
+                ],
+                "properties": {
+                  "toAddress": {
+                    "type": "string",
+                    "description": "Destination wallet address",
+                    "example": "0xabc123def456..."
+                  },
+                  "value": {
+                    "type": "number",
+                    "description": "The amount to withdraw",
+                    "example": 500
+                  },
+                  "token": {
+                    "type": "string",
+                    "description": "The token to withdraw (defaults to USDT)",
+                    "default": "USDT",
+                    "enum": [
+                      "USDT",
+                      "USDC",
+                      "DAI",
+                      "BUSD"
+                    ],
+                    "example": "USDT"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Withdrawal initiated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Success message",
+                      "example": "Withdrawal initiated successfully"
+                    },
+                    "transactionHash": {
+                      "type": "string",
+                      "description": "The blockchain transaction hash",
+                      "example": "0x987defabc654321..."
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indicates if the withdrawal was successful",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid request parameters"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized - Invalid App ID"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/onchain/order/{id}": {
+      "get": {
+        "tags": [
+          "Onchain"
+        ],
+        "summary": "Retrieve blockchain order details",
+        "description": "Retrieve information about a specific blockchain order by its payment link ID.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Payment link ID of the order",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dep_001234abcd"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "number",
+                      "description": "The value in BRL of the order",
+                      "example": 1000
+                    },
+                    "cryptoValue": {
+                      "type": "number",
+                      "description": "The value in cryptocurrency",
+                      "example": 200
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Current status of the payment",
+                      "enum": [
+                        "PENDING",
+                        "COMPLETED",
+                        "REFUNDED",
+                        "PARTIAL_ORDER",
+                        "FAILED"
+                      ],
+                      "example": "COMPLETED"
+                    },
+                    "paymentLinkId": {
+                      "type": "string",
+                      "description": "Unique identifier for the payment",
+                      "example": "dep_001234abcd"
+                    },
+                    "address": {
+                      "type": "string",
+                      "description": "Cryptocurrency wallet address",
+                      "example": "0xabc123def456..."
+                    },
+                    "paymentURI": {
+                      "type": "string",
+                      "description": "Payment URI for the transaction",
+                      "example": "cryptous://pay/0xabc123def456"
+                    },
+                    "receivedValue": {
+                      "type": "number",
+                      "description": "Value received (if partial payment)",
+                      "example": 150
+                    },
+                    "originalCryptoValue": {
+                      "type": "number",
+                      "description": "Original value in cryptocurrency",
+                      "example": 200
+                    },
+                    "receivedFrom": {
+                      "type": "string",
+                      "description": "Address that sent the payment",
+                      "example": "0x987defabc654321..."
+                    },
+                    "partialUpdatedAt": {
+                      "type": "string",
+                      "description": "Timestamp when partial payment was received",
+                      "example": "2025-06-01T15:30:00Z"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "description": "Creation timestamp",
+                      "example": "2025-05-30T10:00:00Z"
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "orderId": {
+                          "type": "string",
+                          "example": "order_987654321"
+                        },
+                        "tokenAddress": {
+                          "type": "string",
+                          "example": "0xTokenAddress12345"
+                        },
+                        "network": {
+                          "type": "string",
+                          "example": "bsc"
+                        },
+                        "walletIndex": {
+                          "type": "number",
+                          "example": 5
+                        }
+                      }
+                    },
+                    "asset": {
+                      "type": "string",
+                      "description": "Cryptocurrency asset type",
+                      "example": "USDT"
+                    },
+                    "network": {
+                      "type": "string",
+                      "description": "Blockchain network used",
+                      "example": "bsc"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Order not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Order not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/order/create": {
+      "post": {
+        "tags": [
+          "Onchain"
+        ],
+        "summary": "Create Binance payment order",
+        "description": "Generate a new Binance payment QR code for the specified amount.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "value"
+                ],
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "description": "The payment amount in BRL",
+                    "example": 500
+                  },
+                  "payerId": {
+                    "type": "string",
+                    "description": "Optional payer ID reference",
+                    "example": "payer_12345"
+                  },
+                  "merchant": {
+                    "type": "object",
+                    "description": "Merchant information",
+                    "properties": {
+                      "subMerchantId": {
+                        "type": "string",
+                        "description": "Merchant identifier for the payment",
+                        "example": "sub_merchant_001"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Order created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Order ID",
+                      "example": "ord_001234abcd"
+                    },
+                    "paymentLinkId": {
+                      "type": "string",
+                      "description": "Unique payment link identifier",
+                      "example": "pay_abc123xyz"
+                    },
+                    "value": {
+                      "type": "number",
+                      "description": "Payment amount in BRL",
+                      "example": 500
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Order status",
+                      "enum": [
+                        "PENDING",
+                        "COMPLETED",
+                        "CANCELLED",
+                        "FAILED",
+                        "REFUND"
+                      ],
+                      "example": "PENDING"
+                    },
+                    "qrCodeLink": {
+                      "type": "string",
+                      "description": "URL for the QR code image",
+                      "example": "https://qrcode.cryptouse.com/abc123"
+                    },
+                    "link": {
+                      "type": "string",
+                      "description": "Payment URL for the user",
+                      "example": "https://pay.cryptouse.com/pay_abc123xyz"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Order creation timestamp",
+                      "example": "2025-06-01T12:00:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid request parameters"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized - Invalid App ID"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/order/create/lightning": {
+      "post": {
+        "tags": [
+          "Onchain"
+        ],
+        "summary": "Create Lightning payment invoice",
+        "description": "Generate a new Lightning payment invoice for the specified amount.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "value"
+                ],
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "description": "The payment amount in BRL (will be converted to satoshis)",
+                    "example": 100
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "Optional customer email",
+                    "example": "user@example.com"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Optional customer name",
+                    "example": "João Silva"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Lightning invoice created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Success message",
+                      "example": "Lightning invoice created successfully"
+                    },
+                    "order": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "Order ID",
+                          "example": "ord_light_1234"
+                        },
+                        "paymentLinkId": {
+                          "type": "string",
+                          "description": "Unique payment link identifier",
+                          "example": "pay_light_abc123"
+                        },
+                        "value": {
+                          "type": "number",
+                          "description": "Payment amount in BRL",
+                          "example": 100
+                        },
+                        "status": {
+                          "type": "string",
+                          "description": "Order status",
+                          "enum": [
+                            "PENDING",
+                            "COMPLETED",
+                            "CANCELLED",
+                            "FAILED",
+                            "REFUND"
+                          ],
+                          "example": "PENDING"
+                        },
+                        "invoice": {
+                          "type": "string",
+                          "description": "Lightning Network invoice string",
+                          "example": "lnbc1pvjluezpp5qqqsyqcyq5rqwzqf7xxxxxxx..."
+                        },
+                        "link": {
+                          "type": "string",
+                          "description": "Payment URL for the user",
+                          "example": "https://pay.cryptouse.com/pay_light_abc123"
+                        },
+                        "satoshis": {
+                          "type": "string",
+                          "description": "Payment amount in satoshis",
+                          "example": "250000"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Order creation timestamp",
+                          "example": "2025-06-01T12:00:00Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid request parameters"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/order/create/pix": {
+      "post": {
+        "tags": [
+          "Crypto Pix"
+        ],
+        "summary": "Create PIX payment QR code",
+        "description": "Generate a new PIX payment QR code for the specified amount.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "name"
+                ],
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "description": "The payment amount in BRL",
+                    "example": 150
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Customer name",
+                    "example": "João Silva"
+                  },
+                  "orderRequest": {
+                    "type": "string",
+                    "description": "Order request reference",
+                    "example": "req_987654321"
+                  },
+                  "merchant": {
+                    "type": "string",
+                    "description": "Merchant reference",
+                    "example": "merchant_abc123"
+                  },
+                  "orderId": {
+                    "type": "string",
+                    "description": "Optional custom order ID",
+                    "example": "order_123456"
+                  },
+                  "cnpj": {
+                    "type": "string",
+                    "description": "Company CNPJ number",
+                    "example": "12345678000195"
+                  },
+                  "cpf": {
+                    "type": "string",
+                    "description": "Optional personal CPF number",
+                    "example": "12345678901"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Success message",
+                      "example": "PIX order created successfully"
+                    },
+                    "pixOrder": {
+                      "type": "object",
+                      "properties": {
+                        "paymentLinkId": {
+                          "type": "string",
+                          "description": "Unique payment link identifier",
+                          "example": "pay_pix_abc123"
+                        },
+                        "value": {
+                          "type": "number",
+                          "description": "Payment amount in BRL",
+                          "example": 150
+                        },
+                        "status": {
+                          "type": "string",
+                          "description": "Order status",
+                          "enum": [
+                            "PENDING",
+                            "COMPLETED",
+                            "CANCELLED",
+                            "FAILED",
+                            "REFUND"
+                          ],
+                          "example": "PENDING"
+                        },
+                        "brcode": {
+                          "type": "string",
+                          "description": "PIX BR code for payment",
+                          "example": "00020126360014BR.GOV.BCB.PIX0114+5581987654320520400053039865406150.005802BR5920Joao Silva Tecnologia6009Sao Paulo62070503***6304B13F"
+                        },
+                        "link": {
+                          "type": "string",
+                          "description": "Payment URL for the user",
+                          "example": "https://pay.cryptouse.com/pay_pix_abc123"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Order creation timestamp",
+                          "example": "2025-06-01T12:00:00Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid request parameters"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/order/{id}": {
+      "get": {
+        "tags": ["Payment Order"],
+        "summary": "Retrieve payment order details",
+        "description": "Retrieve payment order details with the payment link identifier.",
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Payment link ID or payment identifier",
+            "schema": {
+              "type": "string",
+              "example": "pay_pix_abc123"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Success message",
+                      "example": "Order found"
+                    },
+                    "order": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "Order ID",
+                          "example": "ord_123456"
+                        },
+                        "paymentLinkId": {
+                          "type": "string",
+                          "description": "Unique payment link identifier",
+                          "example": "pay_pix_abc123"
+                        },
+                        "value": {
+                          "type": "number",
+                          "description": "Payment amount in BRL",
+                          "example": 150
+                        },
+                        "status": {
+                          "type": "string",
+                          "description": "Order status",
+                          "enum": ["PENDING", "COMPLETED", "CANCELLED", "FAILED", "REFUND"],
+                          "example": "PENDING"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Order creation timestamp",
+                          "example": "2025-06-01T12:00:00Z"
+                        },
+                        "brcode": {
+                          "type": "string",
+                          "description": "PIX BR code (only for PIX orders)",
+                          "example": "00020126360014BR.GOV.BCB.PIX0114+5581987654320..."
+                        },
+                        "qrCodeLink": {
+                          "type": "string",
+                          "description": "QR code URL (only for Binance orders)",
+                          "example": "https://pay.binance.com/qrcode/abc123"
+                        },
+                        "invoice": {
+                          "type": "string",
+                          "description": "Lightning invoice (only for Lightning orders)",
+                          "example": "lnbc1pvjluezpp5qqqsyqcyq5rqwzqf7..."
+                        },
+                        "link": {
+                          "type": "string",
+                          "description": "Payment URL for the user",
+                          "example": "https://pay.cryptouse.com/pay_pix_abc123"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Order not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Order not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/crypto-pix/onchain/pay": {
+      "post": {
+        "tags": ["Crypto Pix"],
+        "summary": "Convert cryptocurrency and make a PIX payment",
+        "description": "Convert cryptocurrency and make a PIX payment using the QR code provided.",
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["qrcode", "network"],
+                "properties": {
+                  "qrcode": {
+                    "type": "string",
+                    "description": "The PIX QR code to be processed",
+                    "example": "00020126360014BR.GOV.BCB.PIX0114+5581987654320..."
+                  },
+                  "network": {
+                    "type": "string",
+                    "description": "Blockchain network to use",
+                    "enum": ["bsc", "eth"],
+                    "example": "bsc"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Payment request created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "pixKey": {
+                          "type": "string",
+                          "description": "The PIX key of the recipient",
+                          "example": "+5581987654320"
+                        },
+                        "payCryptoPixId": {
+                          "type": "string",
+                          "description": "Unique identifier for the payment",
+                          "example": "pay_crypto_pix_abc123"
+                        },
+                        "value": {
+                          "type": "number",
+                          "description": "The value in BRL to be paid",
+                          "example": 150
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid QR code or network"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/crypto-pix/order/get": {
+      "post": {
+        "tags": ["Crypto Pix"],
+        "summary": "Get details of a crypto PIX payment order",
+        "description": "Retrieve information about a specific crypto PIX payment by its ID.",
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["id"],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "The base64 encoded ID of the payment order",
+                    "example": "cGF5X2NyeXB0b19waXhfYWJjMTIz"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Payment order details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "number",
+                      "description": "The value in BRL of the payment",
+                      "example": 150
+                    },
+                    "cryptoValue": {
+                      "type": "number",
+                      "description": "The value in cryptocurrency",
+                      "example": 0.0025
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Last update timestamp",
+                      "example": "2025-06-02T12:00:00Z"
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Current status of the payment",
+                      "enum": ["PENDING", "COMPLETED", "REFUNDED", "PARTIAL_ORDER", "FAILED"],
+                      "example": "COMPLETED"
+                    },
+                    "network": {
+                      "type": "string",
+                      "description": "Blockchain network used for the payment",
+                      "example": "bsc"
+                    },
+                    "address": {
+                      "type": "string",
+                      "description": "Cryptocurrency wallet address",
+                      "example": "0x1234567890abcdef1234567890abcdef12345678"
+                    },
+                    "receivedValue": {
+                      "type": "number",
+                      "description": "Value received (if partial payment)",
+                      "example": 0.001
+                    },
+                    "originalCryptoValue": {
+                      "type": "number",
+                      "description": "Original value in cryptocurrency",
+                      "example": 0.0025
+                    },
+                    "partialUpdatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Timestamp when partial payment was received",
+                      "example": "2025-06-02T12:15:00Z"
+                    },
+                    "partialBrlValue": {
+                      "type": "number",
+                      "description": "Partial value in BRL",
+                      "example": 60
+                    },
+                    "isPartial": {
+                      "type": "boolean",
+                      "description": "Whether the order is partially paid",
+                      "example": true
+                    },
+                    "remaining": {
+                      "type": "number",
+                      "description": "Remaining value to be paid if partial",
+                      "example": 90
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Payment order not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "Payment order not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

@@ -27,7 +27,7 @@ Este endpoint gera uma nova fatura (invoice) Lightning Network para o valor espe
 ```bash
 curl -X POST "https://api.cryptouse.com.br/api/v1/order/create/lightning" \
   -H "Content-Type: application/json" \
-  -H "X-App-ID: sua_chave_de_api" \
+  -H "Authorization: Bearer seu_token_aqui" \
   -d '{
     "value": 50.00,
     "email": "cliente@exemplo.com",

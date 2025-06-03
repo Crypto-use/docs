@@ -29,7 +29,7 @@ Este endpoint inicia uma transação de saque da carteira do usuário para um en
 ```bash
 curl -X POST "https://api.cryptouse.com.br/api/v1/onchain/withdraw/initiate" \
   -H "Content-Type: application/json" \
-  -H "X-App-ID: sua_chave_de_api" \
+  -H "Authorization: Bearer seu_token_aqui" \
   -d '{
     "toAddress": "0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t",
     "value": 50.00,

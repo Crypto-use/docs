@@ -43,7 +43,7 @@ Este endpoint gera um novo QR code de pagamento PIX para o valor especificado.
 ```bash
 curl -X POST "https://api.cryptouse.com.br/api/v1/order/create/pix" \
   -H "Content-Type: application/json" \
-  -H "X-App-ID: sua_chave_de_api" \
+  -H "Authorization: Bearer seu_token_aqui" \
   -d '{
     "orderRequest": "req_123",
     "merchant": "merch_456",
