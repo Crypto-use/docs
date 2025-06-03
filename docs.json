@@ -65,6 +65,13 @@
               "api-reference/endpoint/crypto-pix/pay",
               "api-reference/endpoint/crypto-pix/get-order"
             ]
+          },
+          {
+            "group": "Webhooks",
+            "pages": [
+              "api-reference/webhooks/overview",
+              "api-reference/webhooks/pix-order"
+            ]
           }
         ]
       }
