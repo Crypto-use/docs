@@ -11,7 +11,7 @@ Este endpoint processa uma solicitação de saque via PIX para a chave PIX forne
 ### Requisição
 
 <ParamField body="value" type="number" required>
-  O valor do saque em BRL
+  O valor do saque em centavos (ex: 100 = R$ 1,00)
 </ParamField>
 
 <ParamField body="pixKey" type="string">
@@ -25,7 +25,7 @@ curl -X POST "https://api.cryptouse.com.br/api/v1/order/pix-out" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer seu_token_aqui" \
   -d '{
-    "value": 100.00,
+    "value": 10000,
     "pixKey": "email@exemplo.com"
   }'
 ```
@@ -37,7 +37,7 @@ curl -X POST "https://api.cryptouse.com.br/api/v1/order/pix-out" \
 </ResponseField>
 
 <ResponseField name="amount" type="number">
-  O valor sacado
+  O valor sacado em centavos (ex: 10000 = R$ 100,00)
 </ResponseField>
 
 ### Exemplo de resposta
@@ -47,7 +47,7 @@ curl -X POST "https://api.cryptouse.com.br/api/v1/order/pix-out" \
 ```json Sucesso (201)
 {
   "message": "Saque processado com sucesso",
-  "amount": 100.00
+  "amount": 10000
 }
 ```
 
@@ -77,23 +77,6 @@ curl -X POST "https://api.cryptouse.com.br/api/v1/order/pix-out" \
 
 </CodeGroup>
 
-## Limites de saque
-
-Os limites de saque via PIX são:
-
-| Tipo de conta | Limite diário | Limite por transação |
-|---------------|---------------|---------------------|
-| Padrão        | R$ 5.000      | R$ 1.000            |
-| Verificada    | R$ 50.000     | R$ 10.000           |
-| Empresarial   | R$ 100.000    | R$ 25.000           |
-
-## Horário de processamento
-
-Os saques PIX são processados 24/7, incluindo finais de semana e feriados. O tempo médio de processamento é de:
-
-- Horário comercial (seg-sex, 9h-18h): até 5 minutos
-- Fora do horário comercial: até 15 minutos
-
 ## Chaves PIX suportadas
 
 O endpoint aceita todos os tipos de chaves PIX:
@@ -108,5 +91,4 @@ O endpoint aceita todos os tipos de chaves PIX:
 
 - O saldo disponível deve ser suficiente para cobrir o valor do saque
 - A chave PIX deve estar ativa e válida no sistema bancário
-- Saques para contas de terceiros podem exigir verificação adicional
-- Em caso de falha, o valor é automaticamente estornado para sua conta
+
