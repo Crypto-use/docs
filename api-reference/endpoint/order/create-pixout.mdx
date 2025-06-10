@@ -1,0 +1,94 @@
+---
+title: 'Criar Saque PIX'
+api: 'POST /api/v1/order/pix-out'
+description: 'Crie uma solicitação de saque via PIX'
+---
+
+## Criar solicitação de saque PIX
+
+Este endpoint processa uma solicitação de saque via PIX para a chave PIX fornecida.
+
+### Requisição
+
+<ParamField body="value" type="number" required>
+  O valor do saque em centavos (ex: 100 = R$ 1,00)
+</ParamField>
+
+<ParamField body="pixKey" type="string">
+  Chave PIX para o saque. Se não fornecida, será utilizada a chave PIX registrada do comerciante
+</ParamField>
+
+### Exemplo de requisição
+
+```bash
+curl -X POST "https://api.cryptouse.com.br/api/v1/order/pix-out" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer seu_token_aqui" \
+  -d '{
+    "value": 10000,
+    "pixKey": "email@exemplo.com"
+  }'
+```
+
+### Resposta
+
+<ResponseField name="message" type="string">
+  Mensagem de sucesso
+</ResponseField>
+
+<ResponseField name="amount" type="number">
+  O valor sacado em centavos (ex: 10000 = R$ 100,00)
+</ResponseField>
+
+### Exemplo de resposta
+
+<CodeGroup>
+
+```json Sucesso (201)
+{
+  "message": "Saque processado com sucesso",
+  "amount": 10000
+}
+```
+
+```json Requisição inválida (400)
+{
+  "message": "Dados inválidos na requisição",
+  "error": {
+    "details": "Valor de saque inválido"
+  }
+}
+```
+
+```json Não autorizado (401)
+{
+  "message": "Chave de API inválida ou não autorizada"
+}
+```
+
+```json Erro interno (500)
+{
+  "message": "Ocorreu um erro ao processar sua solicitação",
+  "error": {
+    "details": "Erro ao processar o saque PIX"
+  }
+}
+```
+
+</CodeGroup>
+
+## Chaves PIX suportadas
+
+O endpoint aceita todos os tipos de chaves PIX:
+
+- CPF/CNPJ
+- Email
+- Telefone
+- Chave aleatória
+- Chave EVP
+
+## Notas importantes
+
+- O saldo disponível deve ser suficiente para cobrir o valor do saque
+- A chave PIX deve estar ativa e válida no sistema bancário
+
