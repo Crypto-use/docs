@@ -1,0 +1,67 @@
+---
+title: 'Consultar Conta'
+api: 'GET /api/v1/account'
+description: 'Obtenha informações da conta do comerciante'
+---
+
+## Consultar informações da conta
+
+Este endpoint retorna os detalhes da conta do comerciante, incluindo nome da empresa, chave PIX e saldo atual.
+
+### Resposta
+
+<ResponseField name="merchant" type="object">
+  <Expandable title="Propriedades">
+    <ResponseField name="companyName" type="string">
+      Nome da empresa do comerciante
+    </ResponseField>
+    <ResponseField name="pixKey" type="string">
+      Chave PIX do comerciante
+    </ResponseField>
+    <ResponseField name="balance" type="number">
+      Saldo atual da conta em centavos (ex: 10000 = R$ 100,00)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Exemplo de requisição
+
+```bash
+curl -X GET "https://api.cryptouse.com.br/api/v1/account" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer seu_token_aqui"
+```
+
+### Exemplo de resposta
+
+<CodeGroup>
+
+```json Sucesso (200)
+{
+  "merchant": {
+    "companyName": "Empresa Exemplo Ltda",
+    "pixKey": "exemplo@email.com",
+    "balance": 10000
+  }
+}
+```
+
+```json Requisição inválida (400)
+{
+  "message": "Erro ao processar a requisição"
+}
+```
+
+```json Não autorizado (401)
+{
+  "message": "Chave de API inválida ou não autorizada"
+}
+```
+
+</CodeGroup>
+
+## Notas importantes
+
+- O saldo é retornado em centavos (100 = R$ 1,00)
+- A chave PIX exibida é a chave principal registrada para a conta
+- O nome da empresa deve corresponder ao registro no sistema
