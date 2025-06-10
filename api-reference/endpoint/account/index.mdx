@@ -1,0 +1,40 @@
+---
+title: 'Consultar Conta'
+menuTitle: 'Introdução'
+weight: 1
+---
+
+## Introdução à API de Consulta de Conta
+
+O endpoint `GET /api/v1/account` permite que comerciantes obtenham informações essenciais sobre sua conta registrada em nossa plataforma. Esta funcionalidade é fundamental para integrações e sistemas que precisam acessar dados básicos da conta de forma programática.
+
+### Principais Recursos
+
+- **Dados da Empresa**: Acesse o nome registrado da sua empresa
+- **Informações PIX**: Obtenha a chave PIX principal associada à conta
+- **Saldo Atual**: Consulte o saldo disponível em tempo real (em centavos)
+
+### Quando Usar
+
+Você deve utilizar este endpoint quando precisar:
+
+- Exibir informações da conta em seu painel administrativo
+- Verificar o saldo disponível para transações
+- Validar a chave PIX registrada
+- Integrar com sistemas de contabilidade ou ERP
+
+### Fluxo Básico
+
+1. Autentique-se com seu token de API
+2. Faça uma requisição GET para `/api/v1/account`
+3. Processe a resposta contendo os dados da conta
+
+### Segurança
+
+Este endpoint requer autenticação via Bearer Token. Certifique-se de:
+
+- Proteger suas chaves de API
+- Utilizar HTTPS em todas as requisições
+- Implementar tratamento seguro dos dados retornados
+
+Pronto para começar? Explore a documentação detalhada nas seções abaixo para implementar esta integração em seu sistema.

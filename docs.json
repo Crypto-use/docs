@@ -40,6 +40,13 @@
             "pages": ["api-reference/endpoint/introduction"]
           },
           {
+            "group": "Account",
+            "pages": [
+              "api-reference/endpoint/account/index",
+              "api-reference/endpoint/account/account-get"
+              ]
+          },
+          {
             "group": "Onchain",
             "pages": [
               "api-reference/endpoint/onchain/index",
