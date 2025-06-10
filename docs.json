@@ -62,7 +62,8 @@
               "api-reference/endpoint/order/create-binance",
               "api-reference/endpoint/order/create-lightning",
               "api-reference/endpoint/order/create-pix",
-              "api-reference/endpoint/order/get-order"
+              "api-reference/endpoint/order/get-order",
+              "api-reference/endpoint/order/create-pixout"
             ]
           },
           {
