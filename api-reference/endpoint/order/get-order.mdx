@@ -17,7 +17,7 @@ Este endpoint retorna informações detalhadas sobre uma ordem de pagamento espe
 ### Exemplo de requisição
 
 ```bash
-curl -X GET "https://api.cryptouse.com.br/api/v1/order/pmt_12345abcde" \
+curl -X GET "https://server.cryptouse.com.br/api/v1/order/98e56f6d-b600-48d2-a251-8c7b206958b2" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer seu_token_aqui"
 ```
@@ -62,51 +62,108 @@ curl -X GET "https://api.cryptouse.com.br/api/v1/order/pmt_12345abcde" \
   </Expandable>
 </ResponseField>
 
+<ResponseField name="openNodeDetails" type="object">
+  <Expandable title="Propriedades (apenas para ordens Lightning)">
+    <ResponseField name="success" type="boolean">
+      Indica se a consulta ao OpenNode foi bem-sucedida
+    </ResponseField>
+    <ResponseField name="data" type="object">
+      <Expandable title="Dados do OpenNode">
+        <ResponseField name="id" type="string">
+          ID da fatura no OpenNode
+        </ResponseField>
+        <ResponseField name="name" type="string" nullable>
+          Nome da fatura
+        </ResponseField>
+        <ResponseField name="status" type="string">
+          Status da fatura no OpenNode
+        </ResponseField>
+        <ResponseField name="currency" type="string">
+          Moeda da fatura
+        </ResponseField>
+        <ResponseField name="created_at" type="number">
+          Timestamp de criação da fatura
+        </ResponseField>
+        <ResponseField name="fee" type="number">
+          Taxa da fatura
+        </ResponseField>
+        <ResponseField name="notes" type="string">
+          Notas da fatura
+        </ResponseField>
+        <ResponseField name="address" type="string">
+          Endereço da carteira
+        </ResponseField>
+        <ResponseField name="metadata" type="object">
+          Metadados da fatura
+        </ResponseField>
+        <ResponseField name="fiat_value" type="number">
+          Valor em fiat (BRL)
+        </ResponseField>
+        <ResponseField name="amount" type="number">
+          Valor em satoshis
+        </ResponseField>
+        <ResponseField name="description" type="string">
+          Descrição da fatura
+        </ResponseField>
+        <ResponseField name="auto_settle" type="boolean">
+          Indica se a fatura é liquidada automaticamente
+        </ResponseField>
+        <ResponseField name="transactions" type="array">
+          Array de transações
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
 ### Exemplo de resposta
 
 <CodeGroup>
 
-```json Sucesso - Ordem PIX (200)
-{
-  "message": "Ordem encontrada",
-  "order": {
-    "id": "ord_67890fghij",
-    "paymentLinkId": "pmt_12345abcde",
-    "value": 200.00,
-    "status": "COMPLETED",
-    "createdAt": "2023-04-20T15:00:00Z",
-    "brcode": "00020101021226890014br.gov.bcb.pix2557invoice.cryptouse.com/pmt_12345abcde5204000053039865802BR5913Empresa PIX6008Sao Paulo62290525pmt_12345abcde1234567890123640230A",
-    "link": "https://pay.cryptouse.com/pix/pmt_12345abcde"
-  }
-}
-```
-
-```json Sucesso - Ordem Binance (200)
-{
-  "message": "Ordem encontrada",
-  "order": {
-    "id": "ord_67890fghij",
-    "paymentLinkId": "pmt_12345abcde",
-    "value": 150.00,
-    "status": "PENDING",
-    "createdAt": "2023-04-20T15:00:00Z",
-    "qrCodeLink": "https://api.cryptouse.com.br/qrcode/pmt_12345abcde.png",
-    "link": "https://pay.cryptouse.com/binance/pmt_12345abcde"
-  }
-}
-```
-
 ```json Sucesso - Ordem Lightning (200)
 {
-  "message": "Ordem encontrada",
+  "message": "Order retrieved successfully",
   "order": {
-    "id": "ord_67890fghij",
-    "paymentLinkId": "pmt_12345abcde",
-    "value": 50.00,
+    "id": "688a5e459b11ce1a1a85e32a",
+    "paymentLinkId": "98e56f6d-b600-48d2-a251-8c7b206958b2",
+    "value": 5000,
     "status": "PENDING",
-    "createdAt": "2023-04-20T15:00:00Z",
-    "invoice": "lnbc10n1p3hj507pp5enpzk7xalj8k4qssu8k42nrhxd6gehhwdvjxs9w39m9u2xcyxsdqqcqzpgxqyz5vqsp5usyc0ezh9l7m4drja5g56xe6aqsmuhts6j6fxurpsju75h8tn76q9qyyssqj4zs3jtm764fgdcgx067j8tjdvqhh2rpnl6v0ntlc6j8w4jt6qmx3fjc9vl0x9s3gkqfm4qsf2j9c3z7zjtmf6mw2886xdnljnrgpf9ykx6",
-    "link": "https://pay.cryptouse.com/lightning/pmt_12345abcde"
+    "createdAt": "2025-07-30T18:02:45.965Z",
+    "invoice": "Inbc75800n1p5g5hj9pp58x8fx94hdc19zzpn3ecxc349mkje27v738a981ztczeqq2y0cmvsdquf9h8vmmfvdjjqsmj09c8gmm4wdjscqzysxqzjhsp54qv2q6at8hges7cvsjtzhqfucdjqelhe5e184a4a3hn14sdcy",
+    "link": "https://cryptouse.com.br/order/lightning/98e56f6d-b600-48d2-a251-8c7b206958b2"
+  },
+  "openNodeDetails": {
+    "success": true,
+    "data": {
+      "id": "fc1fb9a8-93c9-4a96-ba50-e9802e21bdbb",
+      "name": null,
+      "status": "unpaid",
+      "currency": "BRL",
+      "created_at": 1753898565,
+      "fee": 75,
+      "notes": "",
+      "address": "356w6JpBDS1YmnNxjmMcwhwAUxCZVJkLiQ",
+      "metadata": {},
+      "fiat_value": 5000,
+      "amount": 7580,
+      "description": "Invoice Cryptouse",
+      "auto_settle": false,
+      "transactions": []
+    }
+  }
+}
+```
+
+```json Sucesso - Ordem PIX (200)
+{
+  "message": "Order retrieved successfully",
+  "order": {
+    "id": "688a60439b11ce1a1a85e450",
+    "paymentLinkId": "d3d7bafe-2040-4f74-bddb-34823c6edcae",
+    "value": 200,
+    "status": "PENDING",
+    "createdAt": "2025-07-30T18:11:15.1512",
+    "link": "https://cryptouse.com.br/order/d3d7bafe-2040-4f74-bddb-34823c6edcae"
   }
 }
 ```
@@ -114,7 +171,7 @@ curl -X GET "https://api.cryptouse.com.br/api/v1/order/pmt_12345abcde" \
 ```json Ordem não encontrada (404)
 {
   "success": false,
-  "error": "Ordem não encontrada"
+  "error": "Order not found"
 }
 ```
 
@@ -126,7 +183,7 @@ Este endpoint funciona para todos os tipos de ordem suportados:
 
 - **Ordens PIX**: Contém o campo `brcode`
 - **Ordens Binance**: Contém o campo `qrCodeLink`
-- **Ordens Lightning**: Contém o campo `invoice`
+- **Ordens Lightning**: Contém o campo `invoice` e `openNodeDetails`
 
 O tipo de ordem é determinado automaticamente com base no ID fornecido.
 

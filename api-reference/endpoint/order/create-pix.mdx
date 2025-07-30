@@ -10,23 +10,23 @@ Este endpoint gera um novo QR code de pagamento PIX para o valor especificado.
 
 ### Requisição
 
-<ParamField body="orderRequest" type="string">
-  Referência da solicitação de ordem (opcional)
-</ParamField>
-
-<ParamField body="merchant" type="string">
-  Referência do comerciante (opcional)
-</ParamField>
-
 <ParamField body="value" type="number" required>
   O valor do pagamento em BRL
 </ParamField>
 
-<ParamField body="orderId" type="string">
-  ID de ordem personalizado (opcional)
+<ParamField body="orderRequest" type="string">
+  Referência da solicitação de ordem
 </ParamField>
 
-<ParamField body="name" type="string" required>
+<ParamField body="merchant" type="string">
+  Referência do comerciante
+</ParamField>
+
+<ParamField body="orderId" type="string">
+  ID de ordem personalizado
+</ParamField>
+
+<ParamField body="name" type="string">
   Nome do cliente
 </ParamField>
 
@@ -35,17 +35,17 @@ Este endpoint gera um novo QR code de pagamento PIX para o valor especificado.
 </ParamField>
 
 <ParamField body="cpf" type="string">
-  Número de CPF pessoal (opcional)
+  Número de CPF pessoal
 </ParamField>
 
 ### Exemplo de requisição
 
 ```bash
-curl -X POST "https://api.cryptouse.com.br/api/v1/order/create/pix" \
+curl -X POST "https://server.cryptouse.com.br/api/v1/order/create/pix" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer seu_token_aqui" \
   -d '{
-    "orderRequest": "req_123",
+    "orderRequest": "order-1753899073445",
     "merchant": "merch_456",
     "value": 200.00,
     "orderId": "ord_custom_789",
@@ -62,8 +62,14 @@ curl -X POST "https://api.cryptouse.com.br/api/v1/order/create/pix" \
 
 <ResponseField name="pixOrder" type="object">
   <Expandable title="Propriedades">
-    <ResponseField name="paymentLinkId" type="string">
-      Identificador único do link de pagamento
+    <ResponseField name="provider" type="string">
+      Provedor do pagamento
+    </ResponseField>
+    <ResponseField name="hash" type="string">
+      Hash único da ordem
+    </ResponseField>
+    <ResponseField name="merchant" type="string">
+      ID do comerciante
     </ResponseField>
     <ResponseField name="value" type="number">
       Valor do pagamento em BRL
@@ -73,16 +79,38 @@ curl -X POST "https://api.cryptouse.com.br/api/v1/order/create/pix" \
       
       Valores possíveis: `PENDING`, `COMPLETED`, `CANCELLED`, `FAILED`, `REFUND`
     </ResponseField>
-    <ResponseField name="brcode" type="string">
-      Código BR do PIX para pagamento
+    <ResponseField name="currency" type="string">
+      Moeda do pagamento
     </ResponseField>
-    <ResponseField name="link" type="string">
-      URL de pagamento para o usuário
+    <ResponseField name="universalUrl" type="string">
+      URL universal do PIX
+    </ResponseField>
+    <ResponseField name="removedAt" type="string" nullable>
+      Timestamp de remoção (se aplicável)
+    </ResponseField>
+    <ResponseField name="_id" type="string">
+      ID interno da ordem
+    </ResponseField>
+    <ResponseField name="paymentLinkId" type="string">
+      Identificador único do link de pagamento
+    </ResponseField>
+    <ResponseField name="splits" type="array">
+      Array de divisões de pagamento
     </ResponseField>
     <ResponseField name="createdAt" type="string" format="date-time">
       Timestamp de criação da ordem
     </ResponseField>
+    <ResponseField name="updatedAt" type="string" format="date-time">
+      Timestamp de atualização da ordem
+    </ResponseField>
+    <ResponseField name="__v" type="number">
+      Versão do documento
+    </ResponseField>
   </Expandable>
+</ResponseField>
+
+<ResponseField name="qrCode" type="string">
+  Código QR do PIX para pagamento
 </ResponseField>
 
 ### Exemplo de resposta
@@ -91,21 +119,40 @@ curl -X POST "https://api.cryptouse.com.br/api/v1/order/create/pix" \
 
 ```json Sucesso (200)
 {
-  "message": "Ordem PIX criada com sucesso",
+  "message": "order pix created",
   "pixOrder": {
-    "paymentLinkId": "pmt_12345abcde",
-    "value": 200.00,
+    "provider": "MTBANK",
+    "hash": "order-1753899073445",
+    "merchant": "6884d2b4f4ea864855d89fce",
+    "value": 200,
     "status": "PENDING",
-    "brcode": "00020101021226890014br.gov.bcb.pix2557invoice.cryptouse.com/pmt_12345abcde5204000053039865802BR5913Empresa PIX6008Sao Paulo62290525pmt_12345abcde1234567890123640230A",
-    "link": "https://pay.cryptouse.com/pix/pmt_12345abcde",
-    "createdAt": "2023-04-20T15:00:00Z"
-  }
+    "currency": "BRL",
+    "universalUrl": "00020101021226910014br.gov.bcb.pix2569qrcode.mtbank.com.br/spi/qr-code/cob/58ea8c4c14d644c2a95f4a4c2be706425204000053E",
+    "removedAt": null,
+    "_id": "688a68439b11ce1a1a85e450",
+    "paymentLinkId": "d3d7bafe-2040-4f74-bddb-34823c6edcae",
+    "splits": [],
+    "createdAt": "2025-07-30T18:11:15.151Z",
+    "updatedAt": "2025-07-30T18:11:15.151Z",
+    "__v": 0
+  },
+  "qrCode": "00020101021226910014br.gov.bcb.pix2569qrcode.mtbank.com.br/spi/qr-code/cob/50ea8c4c14d644c2a95f4a4c2be706425204000053039865882BF"
 }
 ```
 
 ```json Requisição inválida (400)
 {
-  "message": "Dados inválidos na requisição"
+  "message": "Dados obrigatórios ausentes para MTBank",
+  "details": {
+    "pixKey": "54e0c85c-55db-4e26-a32b-26b7532cddf2",
+    "identifier": "order-1753899088948"
+  }
+}
+```
+
+```json Requisição inválida (401)
+{
+  "message": "Unauthorized: Authorization header missing"
 }
 ```
 

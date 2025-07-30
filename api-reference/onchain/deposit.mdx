@@ -29,7 +29,7 @@ Este endpoint cria uma nova ordem de depósito onchain e gera um endereço de ca
 ### Exemplo de requisição
 
 ```bash
-curl -X POST "https://api.cryptouse.com.br/api/v1/onchain/deposit" \
+curl -X POST "https://server.cryptouse.com.br/api/v1/onchain/deposit" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer seu_token_aqui" \
   -d '{
@@ -77,9 +77,9 @@ curl -X POST "https://api.cryptouse.com.br/api/v1/onchain/deposit" \
 }
 ```
 
-```json Erro de rede inválida (400)
+```json Rede inválida (400)
 {
-  "message": "Rede blockchain inválida",
+  "message": "Rede blockchain não suportada",
   "supportedNetworks": ["eth", "bsc", "polygon"]
 }
 ```
