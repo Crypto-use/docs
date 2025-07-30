@@ -70,10 +70,22 @@ Autenticação via API key no formato `Bearer: <sua_chave_de_api>`, onde `<sua_c
 }
 ```
 
-```json Erro de rede inválida (400)
+```json Rede inválida (400)
 {
-  "message": "Rede blockchain inválida",
+  "message": "Rede blockchain não suportada",
   "supportedNetworks": ["eth", "bsc", "polygon"]
+}
+```
+
+```json Valor de criptomoeda inválido (400)
+{
+  "message": "Valor de criptomoeda calculado inválido"
+}
+```
+
+```json Token não suportado (400)
+{
+  "message": "Token de criptomoeda não suportado"
 }
 ```
 
@@ -96,7 +108,7 @@ Autenticação via API key no formato `Bearer: <sua_chave_de_api>`, onde `<sua_c
 <CodeGroup>
 
 ```bash cURL
-curl -X POST "https://api.cryptouse.com.br/api/v1/onchain/deposit" \
+curl -X POST "https://server.cryptouse.com.br/api/v1/onchain/deposit" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer seu_token_aqui" \
   -d '{
@@ -116,7 +128,7 @@ const data = {
   network: 'bsc'
 };
 
-axios.post('https://api.cryptouse.com.br/api/v1/onchain/deposit', data, {
+axios.post('https://server.cryptouse.com.br/api/v1/onchain/deposit', data, {
   headers: {
     'Content-Type': 'application/json',
     'Bearer': apiKey
@@ -135,7 +147,7 @@ import requests
 import json
 
 api_key = 'sua_chave_de_api'
-url = 'https://api.cryptouse.com.br/api/v1/onchain/deposit'
+url = 'https://server.cryptouse.com.br/api/v1/onchain/deposit'
 headers = {
     'Content-Type': 'application/json',
     'Bearer': api_key

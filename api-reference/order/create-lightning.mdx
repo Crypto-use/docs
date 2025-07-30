@@ -25,7 +25,7 @@ Este endpoint gera uma nova fatura de pagamento Lightning Network para o valor e
 ### Exemplo de requisição
 
 ```bash
-curl -X POST "https://api.cryptouse.com.br/api/v1/order/create/lightning" \
+curl -X POST "https://server.cryptouse.com.br/api/v1/order/create/lightning" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer seu_token_aqui" \
   -d '{
@@ -63,9 +63,7 @@ curl -X POST "https://api.cryptouse.com.br/api/v1/order/create/lightning" \
     <ResponseField name="link" type="string">
       URL de pagamento para o usuário
     </ResponseField>
-    <ResponseField name="satoshis" type="string">
-      Valor do pagamento em satoshis
-    </ResponseField>
+    
     <ResponseField name="createdAt" type="string" format="date-time">
       Timestamp de criação da ordem
     </ResponseField>
@@ -78,16 +76,15 @@ curl -X POST "https://api.cryptouse.com.br/api/v1/order/create/lightning" \
 
 ```json Sucesso (201)
 {
-  "message": "Fatura Lightning criada com sucesso",
+  "message": "Lightning invoice was successfully created",
   "order": {
-    "id": "ord_12345abcde",
-    "paymentLinkId": "pmt_12345abcde",
-    "value": 50.00,
+    "id": "688a5e459b11ce1a1a85e32a",
+    "paymentLinkId": "98e56f6d-b600-48d2-a251-8c7b206958b2",
+    "value": 5000,
     "status": "PENDING",
-    "invoice": "lnbc1500n1p0nla53pp5j5jz95rz3q65tpk9m8mkm9ze45g0kr5q42dkkcfk4wxtywf5nhqdqqcqzpgxqyz5vqsp5usw4xtnszv9g7g2acu89a26793qmk9ee7vxd5x5w5h9ht28qjq9qyyssqllgz56hkwmxj4z6tqpaj3c4pww7qgzjn266km3vz5kdmzgaacpmxn90zg8xgq2l3ezqxtj5grw4xdj3ya8lc30a9vfwlnv5mwqv8qqfcvdal",
-    "link": "https://pay.cryptouse.com/lightning/pmt_12345abcde",
-    "satoshis": "100000",
-    "createdAt": "2023-07-15T10:30:00Z"
+    "invoice": "Inbc75800n1p5g5hj9pp58x8fx94hdc19zxpn3ecxc349mkje27v738a981ztczeqq2y0cmvsdquf9h8vmmfvdjjqsmj09c8gmm4wdjscqzysxqzjhsp54qv2q6",
+    "link": "https://cryptouse.com.br/order/lightning/98e56f6d-b600-48d2-a251-8c7b206958b2",
+    "createdAt": "2025-07-30T18:02:45.965Z"
   }
 }
 ```
@@ -95,7 +92,7 @@ curl -X POST "https://api.cryptouse.com.br/api/v1/order/create/lightning" \
 ```json Requisição inválida (400)
 {
   "success": false,
-  "error": "Valor inválido. O valor mínimo é R$ 1,00"
+  "error": "OpenNode API error: 400 Bad Request"
 }
 ```
 

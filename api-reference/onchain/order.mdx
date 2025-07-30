@@ -17,7 +17,7 @@ Este endpoint permite recuperar informações sobre uma ordem blockchain especí
 ### Exemplo de requisição
 
 ```bash
-curl -X GET "https://api.cryptouse.com.br/api/v1/onchain/order/pmt_12345abcde" \
+curl -X GET "https://server.cryptouse.com.br/api/v1/onchain/order/0b664ca9-40a4-4692-80e7-f94392bbb4bf" \
   -H "Authorization: Bearer seu_token_aqui"
 ```
 
@@ -25,40 +25,29 @@ curl -X GET "https://api.cryptouse.com.br/api/v1/onchain/order/pmt_12345abcde" \
 
 <ResponseField name="order" type="object">
   <Expandable title="Propriedades">
+    <ResponseField name="network" type="string">
+      Rede blockchain utilizada
+      
+      Valores possíveis: `eth`, `bsc`, `polygon`
+    </ResponseField>
     <ResponseField name="value" type="number">
       O valor em BRL da ordem
     </ResponseField>
     <ResponseField name="cryptoValue" type="number">
       O valor em criptomoeda
     </ResponseField>
+    <ResponseField name="address" type="string">
+      Endereço da carteira de criptomoeda
+    </ResponseField>
+    <ResponseField name="asset" type="string">
+      Tipo de criptomoeda
+      
+      Valores possíveis: `USDT`, `USDC`, `DAI`, `BUSD`
+    </ResponseField>
     <ResponseField name="status" type="string">
       Status atual do pagamento
       
       Valores possíveis: `PENDING`, `COMPLETED`, `REFUNDED`, `PARTIAL_ORDER`, `FAILED`
-    </ResponseField>
-    <ResponseField name="paymentLinkId" type="string">
-      Identificador único para o pagamento
-    </ResponseField>
-    <ResponseField name="address" type="string">
-      Endereço da carteira de criptomoeda
-    </ResponseField>
-    <ResponseField name="paymentURI" type="string">
-      URI de pagamento para a transação
-    </ResponseField>
-    <ResponseField name="receivedValue" type="number">
-      Valor recebido (se pagamento parcial)
-    </ResponseField>
-    <ResponseField name="originalCryptoValue" type="number">
-      Valor original em criptomoeda
-    </ResponseField>
-    <ResponseField name="receivedFrom" type="string">
-      Endereço que enviou o pagamento
-    </ResponseField>
-    <ResponseField name="partialUpdatedAt" type="string" format="date-time">
-      Timestamp de quando o pagamento parcial foi recebido
-    </ResponseField>
-    <ResponseField name="createdAt" type="string" format="date-time">
-      Timestamp de criação
     </ResponseField>
     <ResponseField name="metadata" type="object">
       <Expandable title="Propriedades">
@@ -76,11 +65,11 @@ curl -X GET "https://api.cryptouse.com.br/api/v1/onchain/order/pmt_12345abcde" \
         </ResponseField>
       </Expandable>
     </ResponseField>
-    <ResponseField name="asset" type="string">
-      Tipo de criptomoeda
+    <ResponseField name="paymentLinkId" type="string">
+      Identificador único para o pagamento
     </ResponseField>
-    <ResponseField name="network" type="string">
-      Rede blockchain utilizada
+    <ResponseField name="createdAt" type="string" format="date-time">
+      Timestamp de criação
     </ResponseField>
   </Expandable>
 </ResponseField>
@@ -92,42 +81,51 @@ curl -X GET "https://api.cryptouse.com.br/api/v1/onchain/order/pmt_12345abcde" \
 ```json Sucesso (200)
 {
   "order": {
-    "value": 100.00,
-    "cryptoValue": 23.74,
-    "status": "COMPLETED",
-    "paymentLinkId": "pmt_12345abcde",
-    "address": "0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t",
-    "paymentURI": "ethereum:0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t?value=23.74",
-    "receivedValue": 23.74,
-    "originalCryptoValue": 23.74,
-    "receivedFrom": "0xabcdef1234567890abcdef1234567890abcdef12",
-    "partialUpdatedAt": null,
-    "createdAt": "2023-07-15T10:30:00Z",
-    "metadata": {
-      "orderId": "ord_98765zyxwv",
-      "tokenAddress": "0xdac17f958d2ee523a2206206994597c13d831ec7",
-      "network": "bsc",
-      "walletIndex": 42
-    },
+    "network": "bsc",
+    "value": 100,
+    "cryptoValue": 0.179,
+    "address": "0xdC1bEaD90005669BbFc310624E3B22B2CeeE3D94",
     "asset": "USDT",
-    "network": "bsc"
+    "status": "PENDING",
+    "metadata": {
+      "orderId": "29fdcad5-836f-463f-b770-180bcd80da40",
+      "tokenAddress": "0x55d398326f99059ff775485246999027b3197955",
+      "network": "bsc",
+      "walletIndex": 1100429915
+    },
+    "paymentLinkId": "0b664ca9-40a4-4692-80e7-f94392bbb4bf",
+    "createdAt": "2025-07-30T17:30:54.387Z"
   }
 }
 ```
 
 ```json Ordem não encontrada (400)
 {
-  "message": "Ordem não encontrada"
+  "success": false,
+  "error": "Order not found"
 }
 ```
 
 </CodeGroup>
 
-## Pagamentos parciais
 
-Quando um pagamento parcial é recebido para uma ordem, o status da ordem muda para `PARTIAL_ORDER` e os campos `receivedValue` e `partialUpdatedAt` são preenchidos com os detalhes do pagamento parcial.
 
-Para ordens com pagamentos parciais, você pode calcular o valor restante a ser pago subtraindo `receivedValue` de `cryptoValue`.
+## Redes e Assets Suportados
+
+### Redes Blockchain
+| Rede | Descrição |
+|------|-----------|
+| `eth` | Ethereum Mainnet |
+| `bsc` | Binance Smart Chain |
+| `polygon` | Polygon (Matic) |
+
+### Assets de Criptomoeda
+| Asset | Descrição |
+|-------|-----------|
+| `USDT` | Tether USD |
+| `USDC` | USD Coin |
+| `DAI` | Dai Stablecoin |
+| `BUSD` | Binance USD |
 
 ## Monitoramento de ordens
 

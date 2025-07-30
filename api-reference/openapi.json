@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://api.cryptouse.com.br",
+      "url": "https://server.cryptouse.com.br",
       "description": "Production Server"
     }
   ],
@@ -23,13 +23,6 @@
       "OrderOnChain": {
         "type": "object",
         "properties": {
-          "_id": {
-            "type": "string"
-          },
-          "user": {
-            "type": "string",
-            "description": "User ID that owns this order"
-          },
           "value": {
             "type": "number",
             "description": "The value in BRL of the order"
@@ -37,14 +30,6 @@
           "cryptoValue": {
             "type": "number",
             "description": "The value in cryptocurrency"
-          },
-          "receivedValue": {
-            "type": "number",
-            "description": "Value received (if partial payment)"
-          },
-          "originalCryptoValue": {
-            "type": "number",
-            "description": "Original value in cryptocurrency"
           },
           "status": {
             "type": "string",
@@ -84,19 +69,6 @@
             "type": "string",
             "description": "Unique identifier for the payment link"
           },
-          "paymentURI": {
-            "type": "string",
-            "description": "Payment URI for the transaction"
-          },
-          "receivedFrom": {
-            "type": "string",
-            "description": "Address that sent the payment"
-          },
-          "partialUpdatedAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Timestamp when partial payment was received"
-          },
           "metadata": {
             "type": "object",
             "properties": {
@@ -118,11 +90,6 @@
             "type": "string",
             "format": "date-time",
             "description": "Creation timestamp"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Last update timestamp"
           }
         }
       },
@@ -327,7 +294,14 @@
                   "properties": {
                     "message": {
                       "type": "string",
-                      "example": "Invalid request parameters"
+                      "example": "Rede blockchain não suportada"
+                    },
+                    "supportedNetworks": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": ["eth", "bsc", "polygon"]
                     }
                   }
                 }
@@ -343,7 +317,7 @@
                   "properties": {
                     "message": {
                       "type": "string",
-                      "example": "Unauthorized - Invalid App ID"
+                      "example": "Chave de API inválida ou não autorizada"
                     }
                   }
                 }
@@ -359,7 +333,7 @@
                   "properties": {
                     "message": {
                       "type": "string",
-                      "example": "Internal server error"
+                      "example": "Ocorreu um erro ao processar sua solicitação"
                     }
                   }
                 }
@@ -518,7 +492,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "dep_001234abcd"
+              "example": "0b664ca9-40a4-4692-80e7-f94392bbb4bf"
             }
           }
         ],
@@ -530,98 +504,80 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "value": {
-                      "type": "number",
-                      "description": "The value in BRL of the order",
-                      "example": 1000
-                    },
-                    "cryptoValue": {
-                      "type": "number",
-                      "description": "The value in cryptocurrency",
-                      "example": 200
-                    },
-                    "status": {
-                      "type": "string",
-                      "description": "Current status of the payment",
-                      "enum": [
-                        "PENDING",
-                        "COMPLETED",
-                        "REFUNDED",
-                        "PARTIAL_ORDER",
-                        "FAILED"
-                      ],
-                      "example": "COMPLETED"
-                    },
-                    "paymentLinkId": {
-                      "type": "string",
-                      "description": "Unique identifier for the payment",
-                      "example": "dep_001234abcd"
-                    },
-                    "address": {
-                      "type": "string",
-                      "description": "Cryptocurrency wallet address",
-                      "example": "0xabc123def456..."
-                    },
-                    "paymentURI": {
-                      "type": "string",
-                      "description": "Payment URI for the transaction",
-                      "example": "cryptous://pay/0xabc123def456"
-                    },
-                    "receivedValue": {
-                      "type": "number",
-                      "description": "Value received (if partial payment)",
-                      "example": 150
-                    },
-                    "originalCryptoValue": {
-                      "type": "number",
-                      "description": "Original value in cryptocurrency",
-                      "example": 200
-                    },
-                    "receivedFrom": {
-                      "type": "string",
-                      "description": "Address that sent the payment",
-                      "example": "0x987defabc654321..."
-                    },
-                    "partialUpdatedAt": {
-                      "type": "string",
-                      "description": "Timestamp when partial payment was received",
-                      "example": "2025-06-01T15:30:00Z"
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "description": "Creation timestamp",
-                      "example": "2025-05-30T10:00:00Z"
-                    },
-                    "metadata": {
+                    "order": {
                       "type": "object",
                       "properties": {
-                        "orderId": {
-                          "type": "string",
-                          "example": "order_987654321"
-                        },
-                        "tokenAddress": {
-                          "type": "string",
-                          "example": "0xTokenAddress12345"
-                        },
                         "network": {
                           "type": "string",
+                          "description": "Blockchain network used",
+                          "enum": ["eth", "bsc", "polygon"],
                           "example": "bsc"
                         },
-                        "walletIndex": {
+                        "value": {
                           "type": "number",
-                          "example": 5
+                          "description": "The value in BRL of the order",
+                          "example": 100
+                        },
+                        "cryptoValue": {
+                          "type": "number",
+                          "description": "The value in cryptocurrency",
+                          "example": 0.179
+                        },
+                        "address": {
+                          "type": "string",
+                          "description": "Cryptocurrency wallet address",
+                          "example": "0xdC1bEaD90005669BbFc310624E3B22B2CeeE3D94"
+                        },
+                        "asset": {
+                          "type": "string",
+                          "description": "Cryptocurrency asset type",
+                          "enum": ["USDT", "USDC", "DAI", "BUSD"],
+                          "example": "USDT"
+                        },
+                        "status": {
+                          "type": "string",
+                          "description": "Current status of the payment",
+                          "enum": [
+                            "PENDING",
+                            "COMPLETED",
+                            "REFUNDED",
+                            "PARTIAL_ORDER",
+                            "FAILED"
+                          ],
+                          "example": "PENDING"
+                        },
+                        "metadata": {
+                          "type": "object",
+                          "properties": {
+                            "orderId": {
+                              "type": "string",
+                              "example": "29fdcad5-836f-463f-b770-180bcd80da40"
+                            },
+                            "tokenAddress": {
+                              "type": "string",
+                              "example": "0x55d398326f99059ff775485246999027b3197955"
+                            },
+                            "network": {
+                              "type": "string",
+                              "example": "bsc"
+                            },
+                            "walletIndex": {
+                              "type": "number",
+                              "example": 1100429915
+                            }
+                          }
+                        },
+                        "paymentLinkId": {
+                          "type": "string",
+                          "description": "Unique identifier for the payment",
+                          "example": "0b664ca9-40a4-4692-80e7-f94392bbb4bf"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "description": "Creation timestamp",
+                          "example": "2025-07-30T17:30:54.387Z"
                         }
                       }
-                    },
-                    "asset": {
-                      "type": "string",
-                      "description": "Cryptocurrency asset type",
-                      "example": "USDT"
-                    },
-                    "network": {
-                      "type": "string",
-                      "description": "Blockchain network used",
-                      "example": "bsc"
                     }
                   }
                 }
@@ -635,7 +591,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "error": {
                       "type": "string",
                       "example": "Order not found"
                     }
@@ -811,12 +771,12 @@
                   "value": {
                     "type": "number",
                     "description": "The payment amount in BRL (will be converted to satoshis)",
-                    "example": 100
+                    "example": 50.00
                   },
                   "email": {
                     "type": "string",
                     "description": "Optional customer email",
-                    "example": "user@example.com"
+                    "example": "cliente@exemplo.com"
                   },
                   "name": {
                     "type": "string",
@@ -839,7 +799,7 @@
                     "message": {
                       "type": "string",
                       "description": "Success message",
-                      "example": "Lightning invoice created successfully"
+                      "example": "Lightning invoice was successfully created"
                     },
                     "order": {
                       "type": "object",
@@ -847,17 +807,17 @@
                         "id": {
                           "type": "string",
                           "description": "Order ID",
-                          "example": "ord_light_1234"
+                          "example": "688a5e459b11ce1a1a85e32a"
                         },
                         "paymentLinkId": {
                           "type": "string",
                           "description": "Unique payment link identifier",
-                          "example": "pay_light_abc123"
+                          "example": "98e56f6d-b600-48d2-a251-8c7b206958b2"
                         },
                         "value": {
                           "type": "number",
                           "description": "Payment amount in BRL",
-                          "example": 100
+                          "example": 5000
                         },
                         "status": {
                           "type": "string",
@@ -874,23 +834,18 @@
                         "invoice": {
                           "type": "string",
                           "description": "Lightning Network invoice string",
-                          "example": "lnbc1pvjluezpp5qqqsyqcyq5rqwzqf7xxxxxxx..."
+                          "example": "Inbc75800n1p5g5hj9pp58x8fx94hdc19zxpn3ecxc349mkje27v738a981ztczeqq2y0cmvsdquf9h8vmmfvdjjqsmj09c8gmm4wdjscqzysxqzjhsp54qv2q6"
                         },
                         "link": {
                           "type": "string",
                           "description": "Payment URL for the user",
-                          "example": "https://pay.cryptouse.com/pay_light_abc123"
-                        },
-                        "satoshis": {
-                          "type": "string",
-                          "description": "Payment amount in satoshis",
-                          "example": "250000"
+                          "example": "https://cryptouse.com.br/order/lightning/98e56f6d-b600-48d2-a251-8c7b206958b2"
                         },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time",
                           "description": "Order creation timestamp",
-                          "example": "2025-06-01T12:00:00Z"
+                          "example": "2025-07-30T18:02:45.965Z"
                         }
                       }
                     }
@@ -906,9 +861,13 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "error": {
                       "type": "string",
-                      "example": "Invalid request parameters"
+                      "example": "OpenNode API error: 400 Bad Request"
                     }
                   }
                 }
@@ -937,14 +896,13 @@
               "schema": {
                 "type": "object",
                 "required": [
-                  "value",
-                  "name"
+                  "value"
                 ],
                 "properties": {
                   "value": {
                     "type": "number",
                     "description": "The payment amount in BRL",
-                    "example": 150
+                    "example": 200
                   },
                   "name": {
                     "type": "string",
@@ -992,20 +950,30 @@
                     "message": {
                       "type": "string",
                       "description": "Success message",
-                      "example": "PIX order created successfully"
+                      "example": "order pix created"
                     },
                     "pixOrder": {
                       "type": "object",
                       "properties": {
-                        "paymentLinkId": {
+                        "provider": {
                           "type": "string",
-                          "description": "Unique payment link identifier",
-                          "example": "pay_pix_abc123"
+                          "description": "Payment provider",
+                          "example": "MTBANK"
+                        },
+                        "hash": {
+                          "type": "string",
+                          "description": "Unique order hash",
+                          "example": "order-1753899073445"
+                        },
+                        "merchant": {
+                          "type": "string",
+                          "description": "Merchant ID",
+                          "example": "6884d2b4f4ea864855d89fce"
                         },
                         "value": {
                           "type": "number",
                           "description": "Payment amount in BRL",
-                          "example": 150
+                          "example": 200
                         },
                         "status": {
                           "type": "string",
@@ -1019,23 +987,60 @@
                           ],
                           "example": "PENDING"
                         },
-                        "brcode": {
+                        "currency": {
                           "type": "string",
-                          "description": "PIX BR code for payment",
-                          "example": "00020126360014BR.GOV.BCB.PIX0114+5581987654320520400053039865406150.005802BR5920Joao Silva Tecnologia6009Sao Paulo62070503***6304B13F"
+                          "description": "Payment currency",
+                          "example": "BRL"
                         },
-                        "link": {
+                        "universalUrl": {
                           "type": "string",
-                          "description": "Payment URL for the user",
-                          "example": "https://pay.cryptouse.com/pay_pix_abc123"
+                          "description": "Universal PIX URL",
+                          "example": "00020101021226910014br.gov.bcb.pix2569qrcode.mtbank.com.br/spi/qr-code/cob/58ea8c4c14d644c2a95f4a4c2be706425204000053E"
+                        },
+                        "removedAt": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Removal timestamp if applicable",
+                          "example": null
+                        },
+                        "_id": {
+                          "type": "string",
+                          "description": "Internal order ID",
+                          "example": "688a68439b11ce1a1a85e450"
+                        },
+                        "paymentLinkId": {
+                          "type": "string",
+                          "description": "Unique payment link identifier",
+                          "example": "d3d7bafe-2040-4f74-bddb-34823c6edcae"
+                        },
+                        "splits": {
+                          "type": "array",
+                          "description": "Payment splits array",
+                          "example": []
                         },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time",
                           "description": "Order creation timestamp",
-                          "example": "2025-06-01T12:00:00Z"
+                          "example": "2025-07-30T18:11:15.151Z"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Order update timestamp",
+                          "example": "2025-07-30T18:11:15.151Z"
+                        },
+                        "__v": {
+                          "type": "number",
+                          "description": "Document version",
+                          "example": 0
                         }
                       }
+                    },
+                    "qrCode": {
+                      "type": "string",
+                      "description": "PIX QR code for payment",
+                      "example": "00020101021226910014br.gov.bcb.pix2569qrcode.mtbank.com.br/spi/qr-code/cob/50ea8c4c14d644c2a95f4a4c2be706425204000053039865882BF"
                     }
                   }
                 }
@@ -1051,7 +1056,20 @@
                   "properties": {
                     "message": {
                       "type": "string",
-                      "example": "Invalid request parameters"
+                      "example": "Dados obrigatórios ausentes para MTBank"
+                    },
+                    "details": {
+                      "type": "object",
+                      "properties": {
+                        "pixKey": {
+                          "type": "string",
+                          "example": "54e0c85c-55db-4e26-a32b-26b7532cddf2"
+                        },
+                        "identifier": {
+                          "type": "string",
+                          "example": "order-1753899088948"
+                        }
+                      }
                     }
                   }
                 }
@@ -1075,13 +1093,13 @@
             "description": "Payment link ID or payment identifier",
             "schema": {
               "type": "string",
-              "example": "pay_pix_abc123"
+              "example": "98e56f6d-b600-48d2-a251-8c7b206958b2"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Order found",
+            "description": "Order retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -1090,7 +1108,7 @@
                     "message": {
                       "type": "string",
                       "description": "Success message",
-                      "example": "Order found"
+                      "example": "Order retrieved successfully"
                     },
                     "order": {
                       "type": "object",
@@ -1098,17 +1116,17 @@
                         "id": {
                           "type": "string",
                           "description": "Order ID",
-                          "example": "ord_123456"
+                          "example": "688a5e459b11ce1a1a85e32a"
                         },
                         "paymentLinkId": {
                           "type": "string",
                           "description": "Unique payment link identifier",
-                          "example": "pay_pix_abc123"
+                          "example": "98e56f6d-b600-48d2-a251-8c7b206958b2"
                         },
                         "value": {
                           "type": "number",
                           "description": "Payment amount in BRL",
-                          "example": 150
+                          "example": 5000
                         },
                         "status": {
                           "type": "string",
@@ -1120,7 +1138,7 @@
                           "type": "string",
                           "format": "date-time",
                           "description": "Order creation timestamp",
-                          "example": "2025-06-01T12:00:00Z"
+                          "example": "2025-07-30T18:02:45.965Z"
                         },
                         "brcode": {
                           "type": "string",
@@ -1135,12 +1153,99 @@
                         "invoice": {
                           "type": "string",
                           "description": "Lightning invoice (only for Lightning orders)",
-                          "example": "lnbc1pvjluezpp5qqqsyqcyq5rqwzqf7..."
+                          "example": "Inbc75800n1p5g5hj9pp58x8fx94hdc19zzpn3ecxc349mkje27v738a981ztczeqq2y0cmvsdquf9h8vmmfvdjjqsmj09c8gmm4wdjscqzysxqzjhsp54qv2q6at8hges7cvsjtzhqfucdjqelhe5e184a4a3hn14sdcy"
                         },
                         "link": {
                           "type": "string",
                           "description": "Payment URL for the user",
-                          "example": "https://pay.cryptouse.com/pay_pix_abc123"
+                          "example": "https://cryptouse.com.br/order/lightning/98e56f6d-b600-48d2-a251-8c7b206958b2"
+                        }
+                      }
+                    },
+                    "openNodeDetails": {
+                      "type": "object",
+                      "description": "OpenNode details (only for Lightning orders)",
+                      "properties": {
+                        "success": {
+                          "type": "boolean",
+                          "description": "Indicates if the OpenNode query was successful",
+                          "example": true
+                        },
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "description": "Invoice ID in OpenNode",
+                              "example": "fc1fb9a8-93c9-4a96-ba50-e9802e21bdbb"
+                            },
+                            "name": {
+                              "type": "string",
+                              "nullable": true,
+                              "description": "Invoice name",
+                              "example": null
+                            },
+                            "status": {
+                              "type": "string",
+                              "description": "Invoice status in OpenNode",
+                              "example": "unpaid"
+                            },
+                            "currency": {
+                              "type": "string",
+                              "description": "Invoice currency",
+                              "example": "BRL"
+                            },
+                            "created_at": {
+                              "type": "number",
+                              "description": "Invoice creation timestamp",
+                              "example": 1753898565
+                            },
+                            "fee": {
+                              "type": "number",
+                              "description": "Invoice fee",
+                              "example": 75
+                            },
+                            "notes": {
+                              "type": "string",
+                              "description": "Invoice notes",
+                              "example": ""
+                            },
+                            "address": {
+                              "type": "string",
+                              "description": "Wallet address",
+                              "example": "356w6JpBDS1YmnNxjmMcwhwAUxCZVJkLiQ"
+                            },
+                            "metadata": {
+                              "type": "object",
+                              "description": "Invoice metadata",
+                              "example": {}
+                            },
+                            "fiat_value": {
+                              "type": "number",
+                              "description": "Value in fiat (BRL)",
+                              "example": 5000
+                            },
+                            "amount": {
+                              "type": "number",
+                              "description": "Value in satoshis",
+                              "example": 7580
+                            },
+                            "description": {
+                              "type": "string",
+                              "description": "Invoice description",
+                              "example": "Invoice Cryptouse"
+                            },
+                            "auto_settle": {
+                              "type": "boolean",
+                              "description": "Indicates if the invoice is auto-settled",
+                              "example": false
+                            },
+                            "transactions": {
+                              "type": "array",
+                              "description": "Array of transactions",
+                              "example": []
+                            }
+                          }
                         }
                       }
                     }
@@ -1156,7 +1261,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "error": {
                       "type": "string",
                       "example": "Order not found"
                     }
