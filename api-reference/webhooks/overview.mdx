@@ -1,9 +1,9 @@
 ---
-title: 'Referência'
+title: 'Webhooks'
 description: 'Receba notificações em tempo real sobre eventos importantes nas suas ordens'
 ---
 
-# Referência - Webhooks
+# Webhooks
 
 Os webhooks da CryptoUse permitem que sua aplicação receba notificações automáticas sempre que determinados eventos ocorrem nas ordens. Isso elimina a necessidade de consultas constantes à API para verificar o status.
 
@@ -22,10 +22,69 @@ Os webhooks da CryptoUse permitem que sua aplicação receba notificações auto
 | `LIGHTNING:ORDER_SUCCESS`   | Ordem LIGHTNING paga com sucesso              |
 | `PAYMENT_SUCCESSFUL`   | Ordem BINANCE paga com sucesso              |
 
+## Como cadastrar um Webhook
+
+Você pode cadastrar facilmente um webhook através do painel da CryptoUse. Siga o passo a passo abaixo para receber notificações em tempo real sempre que eventos importantes ocorrerem.
+
+### Passo a passo
+Na seção de perfil do usuário, procure por API/Webhooks.
+![Formulário de cadastro de webhook](/images/webhook-profile-section.png)
+No canto superior direito, clique em "Adicionar webhook".
+![Formulário de cadastro de webhook](/images/add-webhook.png)
+Preencha as informações necessárias para criar seu webhook.
+![Formulário de cadastro de webhook](/images/pix-webhook.png)
+
+### 📝 Preenchendo o formulário
+
+#### 🔹 **Nome**
+- Descrição livre para você identificar o webhook.
+- Exemplo: `Webhook de pedidos pagos`.
+
+#### 🔹 **Evento**
+- Selecione o evento que deseja escutar.
+- Para receber notificações quando uma ordem for paga, escolha um evento.  
+- Exemplo: `PIX:ORDER_SUCCESS`.
+
+#### 🔹 **URL**
+- Endereço (endpoint) da sua aplicação que irá receber as notificações.
+- Deve estar acessível publicamente e aceitar requisições POST no formato JSON.
+
+Exemplo:  
+`https://meusite.com/api/webhooks/order-success`
+
+### 🔐 **Cabeçalhos HTTP (Opcional)**
+
+Aqui você pode adicionar autenticações ou configurações específicas da sua API.
+
+#### Cabeçalhos recomendados:
+
+| Cabeçalho                | Valor                 | Descrição                                                  |
+|--------------------------|-----------------------|------------------------------------------------------------|
+| `Accept`                 | `application/json`    | Define que a requisição aceita JSON                        |
+| `Content-Type`           | `application/json`    | Formato da requisição                                      |
+| `X-Cryptouse-Signature`  | Gerado automaticamente| Assinatura HMAC para validação da origem                   |
+| `Authorization`          | Seu token, opcional | Use caso seu endpoint exija autenticação adicional         |
+
+### 🚀 Após configurar
+
+1. Clique em **Salvar**.
+2. Seu webhook estará ativo e passará a receber notificações sempre que o evento selecionado ocorrer.
+
 ## Ciclo de vida de um Webhook
 
 1. **Cadastro**: Você informa a URL do seu endpoint na plataforma.
 2. **Evento**: Quando o evento ocorre (ex.: pagamento confirmado), a CryptoUse envia uma requisição HTTP POST para a URL cadastrada.
 3. **Processamento**: Sua aplicação recebe os dados do evento e executa as ações desejadas.
 4. **Confirmação**: Seu servidor deve responder com status HTTP `200 OK` para confirmar o recebimento. Caso contrário, novas tentativas de entrega serão feitas.
+
+## 🔗 Exemplo de Payload recebido
+
+```json
+{
+  "universalUrl": "00020126840014br.gov.bcb.pix2562qrcode.transfeera....",
+  "createdAt": "2025-06-03T13:52:34.048Z",
+  "value": "500",
+  "event": "PIX:ORDER_SUCCESS"
+}
+```
 
