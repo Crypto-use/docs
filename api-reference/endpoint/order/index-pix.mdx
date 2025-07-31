@@ -1,35 +1,35 @@
 ---
 title: 'Referência'
-description: 'Endpoints para operações em blockchain'
+description: 'Endpoints para pagamentos PIX'
 ---
 
-# Referência - Onchain
+# Referência - PIX
 
-Endpoints para operações diretas em blockchain, como depósitos e saques.
+Endpoints para criar e gerenciar ordens de pagamento PIX.
 
 ## Endpoints disponíveis
 
 <CardGroup cols={2}>
   <Card
-    title="Criar Depósito"
-    icon="plus"
-    href="/api-reference/endpoint/onchain/deposit"
+    title="Criar Ordem PIX"
+    icon="qrcode"
+    href="/api-reference/endpoint/order/create-pix"
   >
-    Crie uma nova ordem de depósito e gere um endereço para receber fundos
+    Crie uma nova ordem de pagamento PIX
   </Card>
   <Card
-    title="Iniciar Saque"
+    title="Criar PIX Out"
     icon="arrow-up-from-bracket"
-    href="/api-reference/endpoint/onchain/withdraw"
+    href="/api-reference/endpoint/order/create-pixout"
   >
-    Inicie uma transação de saque para um endereço externo
+    Crie uma ordem de saque PIX
   </Card>
   <Card
     title="Consultar Ordem"
     icon="magnifying-glass"
-    href="/api-reference/endpoint/onchain/order"
+    href="/api-reference/endpoint/order/get-order"
   >
-    Obtenha detalhes de uma ordem blockchain específica
+    Obtenha detalhes de uma ordem de pagamento
   </Card>
 </CardGroup>
 

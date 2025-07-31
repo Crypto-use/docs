@@ -1,28 +1,28 @@
 ---
 title: 'Referência'
-description: 'Endpoints para conversão de criptomoedas para PIX'
+description: 'Endpoints para pagamentos Binance'
 ---
 
-# Referência - Crypto PIX
+# Referência - Binance
 
-Endpoints para converter criptomoedas para pagamentos PIX.
+Endpoints para criar e gerenciar ordens de pagamento Binance.
 
 ## Endpoints disponíveis
 
 <CardGroup cols={2}>
   <Card
-    title="Processar Pagamento PIX"
-    icon="money-bill-transfer"
-    href="/api-reference/endpoint/crypto-pix/pay"
+    title="Criar Ordem Binance"
+    icon="b"
+    href="/api-reference/endpoint/order/create-binance"
   >
-    Converta criptomoeda e faça um pagamento PIX
+    Crie uma nova ordem de pagamento Binance
   </Card>
   <Card
-    title="Consultar Ordem Crypto-PIX"
+    title="Consultar Ordem"
     icon="magnifying-glass"
-    href="/api-reference/endpoint/crypto-pix/get-order"
+    href="/api-reference/endpoint/order/get-order"
   >
-    Obtenha detalhes de um pagamento Crypto-PIX
+    Obtenha detalhes de uma ordem de pagamento
   </Card>
 </CardGroup>
 
@@ -37,6 +37,7 @@ Endpoints para converter criptomoedas para pagamentos PIX.
 | Código | Descrição |
 |--------|-----------|
 | 200 | Sucesso na operação |
+| 201 | Recurso criado com sucesso |
 | 400 | Erro na requisição ou dados inválidos |
 | 401 | Autenticação inválida ou ausente |
 | 404 | Recurso não encontrado |

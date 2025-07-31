@@ -32,19 +32,21 @@
         "tab": "Documentation",
         "groups": [
           {
-            "group": "Introduction",
-            "pages": ["index"]
-          },
-          {
-            "group": "API Reference",
-            "pages": ["api-reference/endpoint/introduction"]
+            "group": "Introdução",
+            "pages": [
+              "index",
+              "essentials/autenticacao",
+              "api-reference/webhooks/overview",
+              "api-reference/webhooks/criar-webhook",
+              "essentials/producao"
+            ]
           },
           {
             "group": "Account",
             "pages": [
               "api-reference/endpoint/account/index",
               "api-reference/endpoint/account/account-get"
-              ]
+            ]
           },
           {
             "group": "Onchain",
@@ -56,29 +58,84 @@
             ]
           },
           {
-            "group": "Application Order",
+            "group": "Binance",
             "pages": [
-              "api-reference/endpoint/order/index",
+              "api-reference/endpoint/order/index-binance",
               "api-reference/endpoint/order/create-binance",
-              "api-reference/endpoint/order/create-lightning",
-              "api-reference/endpoint/order/create-pix",
-              "api-reference/endpoint/order/get-order",
-              "api-reference/endpoint/order/create-pixout"
+              "api-reference/endpoint/order/get-order"
             ]
           },
           {
-            "group": "Crypto Pix",
+            "group": "Lightning",
+            "pages": [
+              "api-reference/endpoint/order/index-lightning",
+              "api-reference/endpoint/order/create-lightning",
+              "api-reference/endpoint/order/get-order"
+            ]
+          },
+          {
+            "group": "PIX",
+            "pages": [
+              "api-reference/endpoint/order/index-pix",
+              "api-reference/endpoint/order/create-pix",
+              "api-reference/endpoint/order/create-pixout",
+              "api-reference/endpoint/order/get-order"
+            ]
+          },
+          {
+            "group": "Crypto PIX",
             "pages": [
               "api-reference/endpoint/crypto-pix/index",
               "api-reference/endpoint/crypto-pix/pay",
               "api-reference/endpoint/crypto-pix/get-order"
             ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Account",
+            "pages": [
+              "api-reference/endpoint/account/account-get"
+            ]
           },
           {
-            "group": "Webhooks",
+            "group": "Onchain",
             "pages": [
-              "api-reference/webhooks/overview",
-              "api-reference/webhooks/pix-order"
+              "api-reference/endpoint/onchain/deposit",
+              "api-reference/endpoint/onchain/withdraw",
+              "api-reference/endpoint/onchain/order"
+            ]
+          },
+          {
+            "group": "Binance",
+            "pages": [
+              "api-reference/endpoint/order/create-binance",
+              "api-reference/endpoint/order/get-order"
+            ]
+          },
+          {
+            "group": "Lightning",
+            "pages": [
+              "api-reference/endpoint/order/create-lightning",
+              "api-reference/endpoint/order/get-order"
+            ]
+          },
+          {
+            "group": "PIX",
+            "pages": [
+              "api-reference/endpoint/order/create-pix",
+              "api-reference/endpoint/order/create-pixout",
+              "api-reference/endpoint/order/get-order"
+            ]
+          },
+          {
+            "group": "Crypto PIX",
+            "pages": [
+              "api-reference/endpoint/crypto-pix/pay",
+              "api-reference/endpoint/crypto-pix/get-order"
             ]
           }
         ]
