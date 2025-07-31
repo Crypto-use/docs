@@ -1,6 +1,6 @@
 ---
 title: 'Consultar Ordem Crypto-PIX'
-api: 'POST /api/v1/crypto-pix/order/get'
+api: 'GET /api/v1/crypto-pix/order/{id}'
 description: 'Obtenha detalhes de um pagamento Crypto-PIX'
 ---
 
@@ -8,21 +8,17 @@ description: 'Obtenha detalhes de um pagamento Crypto-PIX'
 
 Este endpoint retorna informações detalhadas sobre um pagamento Crypto-PIX específico usando seu ID.
 
-### Requisição
+### Parâmetros da URL
 
-<ParamField body="id" type="string" required>
+<ParamField header="id" type="string" required>
   O ID codificado em base64 da ordem de pagamento
 </ParamField>
 
 ### Exemplo de requisição
 
 ```bash
-curl -X POST "https://server.cryptouse.com.br/api/v1/crypto-pix/order/get" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer seu_token_aqui" \
-  -d '{
-    "id": "Y3B0cGl4XzEyMzQ1YWJjZGU="
-  }'
+curl -X GET "https://server.cryptouse.com.br/api/v1/crypto-pix/order/Y3B0cGl4XzEyMzQ1YWJjZGU=" \
+  -H "Authorization: Bearer seu_token_aqui"
 ```
 
 ### Resposta
@@ -77,12 +73,26 @@ curl -X POST "https://server.cryptouse.com.br/api/v1/crypto-pix/order/get" \
   Valor restante a ser pago, se parcial
 </ResponseField>
 
+<ResponseField name="hash" type="string">
+  Hash da transação blockchain
+</ResponseField>
+
+<ResponseField name="btcQuote" type="number">
+  Cotação do BTC em BRL (apenas para rede Lightning)
+</ResponseField>
+
+<ResponseField name="satoshis" type="string">
+  Valor em satoshis (apenas para rede Lightning)
+</ResponseField>
+
 ### Exemplo de resposta
 
 <CodeGroup>
 
 ```json Sucesso - Pagamento Completo (200)
 {
+  "hash": "0x1234567890abcdef...",
+  "btcQuote": 0,
   "value": 120.50,
   "cryptoValue": 30.25,
   "updatedAt": "2023-04-20T15:30:45Z",
@@ -98,8 +108,30 @@ curl -X POST "https://server.cryptouse.com.br/api/v1/crypto-pix/order/get" \
 }
 ```
 
+```json Sucesso - Pagamento Lightning (200)
+{
+  "hash": "lnbc1234567890abcdef...",
+  "btcQuote": 250000.00,
+  "value": 120.50,
+  "cryptoValue": 0.000482,
+  "updatedAt": "2023-04-20T15:30:45Z",
+  "status": "COMPLETED",
+  "network": "lightning",
+  "address": "lnbc1234567890abcdef...",
+  "receivedValue": 0.000482,
+  "originalCryptoValue": 0.000482,
+  "partialUpdatedAt": null,
+  "partialBrlValue": null,
+  "isPartial": false,
+  "remaining": 0,
+  "satoshis": "48200"
+}
+```
+
 ```json Sucesso - Pagamento Parcial (200)
 {
+  "hash": "0x1234567890abcdef...",
+  "btcQuote": 0,
   "value": 120.50,
   "cryptoValue": 30.25,
   "updatedAt": "2023-04-20T15:30:45Z",
@@ -117,7 +149,7 @@ curl -X POST "https://server.cryptouse.com.br/api/v1/crypto-pix/order/get" \
 
 ```json Ordem não encontrada (404)
 {
-  "message": "Ordem não encontrada"
+  "message": "PayCryptoPix not found"
 }
 ```
 
@@ -153,4 +185,14 @@ Após receber o pagamento em criptomoeda:
 2. Processamos o pagamento PIX para o destinatário
 3. Atualizamos o status da ordem para `COMPLETED`
 
-Este processo geralmente leva entre 1 e 5 minutos, dependendo da rede blockchain utilizada. 
+Este processo geralmente leva entre 1 e 5 minutos, dependendo da rede blockchain utilizada.
+
+## Campos específicos por rede
+
+### Lightning Network
+- `btcQuote`: Cotação atual do BTC em BRL
+- `satoshis`: Valor em satoshis (calculado automaticamente)
+
+### Outras redes
+- `btcQuote`: Sempre 0
+- `satoshis`: Não incluído na resposta 
