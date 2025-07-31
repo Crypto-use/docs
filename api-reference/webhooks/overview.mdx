@@ -1,9 +1,9 @@
 ---
-title: 'Visão Geral de Webhooks'
+title: 'Referência'
 description: 'Receba notificações em tempo real sobre eventos importantes nas suas ordens'
 ---
 
-# Visão Geral de Webhooks
+# Referência - Webhooks
 
 Os webhooks da CryptoUse permitem que sua aplicação receba notificações automáticas sempre que determinados eventos ocorrem nas ordens. Isso elimina a necessidade de consultas constantes à API para verificar o status.
 
@@ -18,7 +18,9 @@ Os webhooks da CryptoUse permitem que sua aplicação receba notificações auto
 | Evento                | Descrição                               |
 |-----------------------|------------------------------------------|
 | `PIX:ORDER_SUCCESS`   | Ordem PIX paga com sucesso              |
-| *(em breve)*          | Novos eventos serão adicionados futuramente |
+| `ONCHAIN:ORDER_SUCCESS`   | Ordem ONCHAIN paga com sucesso              |
+| `LIGHTNING:ORDER_SUCCESS`   | Ordem LIGHTNING paga com sucesso              |
+| `PAYMENT_SUCCESSFUL`   | Ordem BINANCE paga com sucesso              |
 
 ## Ciclo de vida de um Webhook
 

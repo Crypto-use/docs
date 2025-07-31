@@ -1,11 +1,11 @@
 ---
-title: 'PIX'
+title: 'Criar Webhook'
 description: 'Guia passo a passo para cadastrar seu webhook na plataforma CryptoUse'
 ---
 
-# Como cadastrar o Webhook para pagamentos via Pix
+# Como cadastrar um Webhook
 
-Você pode cadastrar facilmente um webhook através do painel da CryptoUse. Siga o passo a passo abaixo para receber notificações em tempo real sempre que uma ordem PIX for paga (`PIX:ORDER_SUCCESS`).
+Você pode cadastrar facilmente um webhook através do painel da CryptoUse. Siga o passo a passo abaixo para receber notificações em tempo real sempre que eventos importantes ocorrerem.
 
 ## Passo a passo
 Na seção de perfil do usuário, procure por API/Webhooks.
@@ -19,14 +19,14 @@ Preencha as informações necessárias para criar seu webhook.
 
 ### 🔹 **Nome**
 - Descrição livre para você identificar o webhook.
-- Exemplo: `Webhook de pedidos pagos PIX`.
+- Exemplo: `Webhook de pedidos pagos`.
 
 ---
 
 ### 🔹 **Evento**
 - Selecione o evento que deseja escutar.
-- Para receber notificações quando uma ordem PIX for paga, escolha:  
-`PIX:ORDER_SUCCESS`.
+- Para receber notificações quando uma ordem for paga, escolha um evento.  
+- Exemplo: `PIX:ORDER_SUCCESS`.
 
 ---
 
@@ -35,7 +35,7 @@ Preencha as informações necessárias para criar seu webhook.
 - Deve estar acessível publicamente e aceitar requisições POST no formato JSON.
 
 Exemplo:  
-`https://meusite.com/api/webhooks/pix-order-success`
+`https://meusite.com/api/webhooks/order-success`
 
 ---
 
@@ -57,7 +57,7 @@ Aqui você pode adicionar autenticações ou configurações específicas da sua
 ## 🚀 Após configurar
 
 1. Clique em **Salvar**.
-2. Seu webhook estará ativo e passará a receber notificações sempre que uma ordem PIX for paga.
+2. Seu webhook estará ativo e passará a receber notificações sempre que o evento selecionado ocorrer.
 
 ## 🔗 Exemplo de Payload recebido
 
@@ -68,3 +68,4 @@ Aqui você pode adicionar autenticações ou configurações específicas da sua
   "value": "500",
   "event": "PIX:ORDER_SUCCESS"
 }
+```
