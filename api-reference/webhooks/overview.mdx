@@ -79,12 +79,27 @@ Aqui você pode adicionar autenticações ou configurações específicas da sua
 
 ## 🔗 Exemplo de Payload recebido
 
+### PIX Order Success
 ```json
 {
   "universalUrl": "00020126840014br.gov.bcb.pix2562qrcode.transfeera....",
   "createdAt": "2025-06-03T13:52:34.048Z",
   "value": "500",
   "event": "PIX:ORDER_SUCCESS"
+}
+```
+
+### Onchain Order Success
+```json
+{
+  "createdAt": "2025-08-01T19:45:18.264Z",
+  "value": "0.10",
+  "event": "ONCHAIN:ORDER_SUCCESS",
+  "walletAddress": "0x6c...",
+  "network": "bsc",
+  "asset": "USDT",
+  "cryptoValue": 0.019,
+  "paymentLinkId": "fd71ff5d-ac4f-..."
 }
 ```
 
