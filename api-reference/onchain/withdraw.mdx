@@ -24,6 +24,12 @@ Este endpoint inicia uma transação de saque da carteira do usuário para um en
   Valores possíveis: `USDT`, `USDC`, `DAI`, `BUSD`
 </ParamField>
 
+<ParamField body="network" type="string" required>
+  A rede blockchain para a transação
+  
+  Valores possíveis: `bsc`, `polygon`
+</ParamField>
+
 ### Exemplo de requisição
 
 ```bash
@@ -33,7 +39,8 @@ curl -X POST "https://server.cryptouse.com.br/api/v1/onchain/withdraw/initiate" 
   -d '{
     "toAddress": "0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t",
     "value": 50.00,
-    "token": "USDT"
+    "token": "USDT",
+    "network": "bsc"
   }'
 ```
 
